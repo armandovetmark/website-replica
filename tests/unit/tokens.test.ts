@@ -21,7 +21,9 @@ const EXPECTED: Record<string, string> = {
 };
 
 describe('design tokens', () => {
-  const css = readFileSync('src/styles/tokens.css', 'utf8');
+  // Strip comments first: token names are mentioned in prose above the block,
+  // and a bare regex would match there and capture the wrong value.
+  const css = readFileSync('src/styles/tokens.css', 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
   it('defines all 16 Webflow Base variables with exact values', () => {
     for (const [name, value] of Object.entries(EXPECTED)) {
@@ -34,5 +36,11 @@ describe('design tokens', () => {
   it('keeps the Webflow misspelling and adds a corrected alias', () => {
     expect(css).toContain('--secodary-dark');
     expect(css).toContain('--secondary-dark');
+  });
+
+  it('--font-body includes Montserrat Variable for self-hosted font', () => {
+    const match = css.match(/--font-body\s*:\s*([^;]+);/);
+    expect(match, 'missing --font-body').not.toBeNull();
+    expect(match![1], '--font-body must include Montserrat Variable').toContain('Montserrat Variable');
   });
 });

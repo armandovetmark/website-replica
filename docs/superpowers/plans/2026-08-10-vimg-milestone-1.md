@@ -194,7 +194,9 @@ const EXPECTED: Record<string, string> = {
 };
 
 describe('design tokens', () => {
-  const css = readFileSync('src/styles/tokens.css', 'utf8');
+  // Strip comments first: token names are mentioned in prose above the block,
+  // and a bare regex would match there and capture the wrong value.
+  const css = readFileSync('src/styles/tokens.css', 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
   it('defines all 16 Webflow Base variables with exact values', () => {
     for (const [name, value] of Object.entries(EXPECTED)) {
@@ -241,7 +243,9 @@ Expected: FAIL — `ENOENT: no such file or directory, open 'src/styles/tokens.c
   --main-o50: #447cdb80;
   --light-grey: #d1d1d1;
 
-  --font-body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* @fontsource-variable/montserrat registers the family as 'Montserrat Variable'.
+     'Montserrat' stays as the fallback for machines with it installed locally. */
+  --font-body: 'Montserrat Variable', 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --header-height: 5rem;
   --callbar-height: 4.5rem;
 }

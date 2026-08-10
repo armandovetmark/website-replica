@@ -20,7 +20,9 @@
   --main-o50: #447cdb80;
   --light-grey: #d1d1d1;
 
-  --font-body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* @fontsource-variable/montserrat registers the family as 'Montserrat Variable'.
+     'Montserrat' stays as the fallback for machines with it installed locally. */
+  --font-body: 'Montserrat Variable', 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --header-height: 5rem;
   --callbar-height: 4.5rem;
 }

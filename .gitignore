@@ -28,3 +28,6 @@ desktop.ini
 .vscode/*
 !.vscode/extensions.json
 .idea/
+
+# superpowers SDD scratch
+.superpowers/

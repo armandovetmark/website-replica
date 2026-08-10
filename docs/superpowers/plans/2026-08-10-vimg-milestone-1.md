@@ -32,7 +32,7 @@ Every task's requirements implicitly include this section.
 **Files:**
 - Create: `package.json`, `astro.config.mjs`, `tsconfig.json`, `vitest.config.ts`
 - Create: `src/pages/index.astro`
-- Test: `tests/smoke.test.ts`
+- Test: `tests/build/smoke.test.ts`
 
 **Interfaces:**
 - Consumes: nothing.
@@ -58,8 +58,8 @@ Replace the `"scripts"` block in `package.json`:
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "vitest run --dir tests/unit",
-    "test:build": "astro build && vitest run --dir tests/build",
+    "test": "vitest run --dir tests/unit --passWithNoTests",
+    "test:build": "astro build && vitest run --dir tests/build --passWithNoTests",
     "verify": "npm test && npm run test:build"
   }
 }

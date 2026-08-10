@@ -1,0 +1,39 @@
+{
+  "name": "vimg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run --dir tests/unit --passWithNoTests",
+    "test:build": "astro build && vitest run --dir tests/build --passWithNoTests",
+    "verify": "npm test && npm run test:build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/armandovetmark/website-replica.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/armandovetmark/website-replica/issues"
+  },
+  "homepage": "https://github.com/armandovetmark/website-replica#readme",
+  "dependencies": {
+    "astro": "^5.18.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "jsdom": "^29.1.1",
+    "linkedom": "^0.18.13",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

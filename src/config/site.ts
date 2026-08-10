@@ -62,7 +62,7 @@ export const navItems: NavItem[] = [
 export const callbarItems: CallbarItem[] = [
   { kind: 'link', label: 'Pop-up\nClinics', href: '/clinic-schedule-locations', icon: 'calendar2.svg' },
   { kind: 'link', label: 'Our\nTeam', href: '/meet-the-team', icon: 'about.svg' },
-  { kind: 'phone', href: 'tel:+17866735903', icon: 'phone.svg' },
+  { kind: 'phone', href: site.phoneHref, icon: 'phone.svg' },
   { kind: 'link', label: 'Contact\nUs', href: '/general-information-request', icon: 'map-pin.svg' },
   { kind: 'action', label: "How'd\nWe Do", action: 'howd-we-do', icon: 'positive-review.png' },
 ];

@@ -403,6 +403,15 @@ describe('site config', () => {
     expect(navItems[0]).toMatchObject({ label: 'Home', href: '/' });
   });
 
+  it('leaves the Services entry ready for build-time CMS injection', () => {
+    // Task 10 finds this entry by label and replaces children with CMS items.
+    // If it is renamed or removed, that injection silently produces an empty menu.
+    const services = navItems.find((i) => i.label === 'Services');
+    expect(services, 'no nav item labelled Services').toBeDefined();
+    expect(services!.href).toBe('/services');
+    expect(services!.children).toEqual([]);
+  });
+
   it('defines 5 callbar cells with the phone in the middle', () => {
     expect(callbarItems).toHaveLength(5);
     expect(callbarItems[2].kind).toBe('phone');
@@ -486,7 +495,7 @@ export const navItems: NavItem[] = [
 export const callbarItems: CallbarItem[] = [
   { kind: 'link', label: 'Pop-up\nClinics', href: '/clinic-schedule-locations', icon: 'calendar2.svg' },
   { kind: 'link', label: 'Our\nTeam', href: '/meet-the-team', icon: 'about.svg' },
-  { kind: 'phone', href: 'tel:+17866735903', icon: 'phone.svg' },
+  { kind: 'phone', href: site.phoneHref, icon: 'phone.svg' },
   { kind: 'link', label: 'Contact\nUs', href: '/general-information-request', icon: 'map-pin.svg' },
   { kind: 'action', label: "How'd\nWe Do", action: 'howd-we-do', icon: 'positive-review.png' },
 ];

@@ -17,6 +17,15 @@ describe('site config', () => {
     expect(navItems[0]).toMatchObject({ label: 'Home', href: '/' });
   });
 
+  it('leaves the Services entry ready for build-time CMS injection', () => {
+    // Task 10 finds this entry by label and replaces children with CMS items.
+    // If it is renamed or removed, that injection silently produces an empty menu.
+    const services = navItems.find((i) => i.label === 'Services');
+    expect(services, 'no nav item labelled Services').toBeDefined();
+    expect(services!.href).toBe('/services');
+    expect(services!.children).toEqual([]);
+  });
+
   it('defines 5 callbar cells with the phone in the middle', () => {
     expect(callbarItems).toHaveLength(5);
     expect(callbarItems[2].kind).toBe('phone');

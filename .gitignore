@@ -31,3 +31,6 @@ desktop.ini
 
 # superpowers SDD scratch
 .superpowers/
+
+# captured reference snapshots (regenerate with tools/capture.mjs)
+tools/snapshots/

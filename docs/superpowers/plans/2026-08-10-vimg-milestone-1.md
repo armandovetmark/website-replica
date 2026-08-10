@@ -6,7 +6,7 @@
 
 **Architecture:** Static Astro site, no UI framework. We author our own global CSS derived from Webflow's compiled stylesheets while preserving Webflow's class names, so markup lifts 1:1 from the live site. Webflow's runtime (jQuery + `webflow.js`) is replaced by small hand-written ES modules. CMS content is exported once into Astro content collections; assets are mirrored locally.
 
-**Tech Stack:** Astro 5.x, TypeScript (strict), Vitest + jsdom (unit tests), linkedom (built-HTML assertions), Sharp via `astro:assets`.
+**Tech Stack:** Astro 7.x, TypeScript (strict), Vitest + jsdom (unit tests), linkedom (built-HTML assertions), Sharp via `astro:assets`.
 
 **Spec:** `docs/superpowers/specs/2026-08-10-vimg-astro-rebuild-design.md`
 
@@ -15,7 +15,7 @@
 Every task's requirements implicitly include this section.
 
 - **The Webflow site is READ-ONLY.** No tool call may mutate site `6952729d2807a37cc07c2e29`. Only read actions are permitted. Never call any Webflow MCP `create_*`, `update_*`, `delete_*`, or `publish_*` action.
-- **Astro 5.x**, `output: 'static'`. No React/Vue/Svelte/Solid.
+- **Astro 7.2.0 or later**, `output: 'static'`. No React/Vue/Svelte/Solid. (The plan originally said 5.x; that line has unpatched high-severity advisories, so the project targets 7.x. `npm audit` must report 0 vulnerabilities.)
 - **No jQuery, no `webflow.js`.** No runtime dependency may be added without it being named in this plan.
 - **All CSS is global**, never Astro-scoped — Webflow class names are shared across pages. Use `<style is:global>` or plain `.css` files imported from `global.css`.
 - **Preserve Webflow class names** exactly (`.general-section`, `.callbar-link`, `.nav-link`, …).

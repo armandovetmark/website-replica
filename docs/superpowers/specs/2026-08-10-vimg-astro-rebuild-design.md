@@ -40,8 +40,15 @@ Structure comes from the published page HTML. Content comes from the Webflow Dat
 
 ## 4. Architecture
 
-Astro 5.x, static output, no React/Vue/Svelte. Pages compose components; components carry
+Astro 7.x, static output, no React/Vue/Svelte. Pages compose components; components carry
 no client runtime except explicit `<script>` modules. TypeScript throughout.
+
+**Version note (2026-08-10):** this design originally specified Astro 5.x. Astro 7.2.0 is the
+current release, and the 5.x line carries unpatched high-severity advisories — XSS in
+`define:vars`, in spread attribute names, and in slot names, plus `sharp`/libvips CVEs — whose
+only remediation `npm audit` offers is a major-version bump. The project therefore targets
+**Astro 7.2.0 or later**, and `npm audit` must report zero vulnerabilities. The APIs this design
+depends on (Content Layer API, `astro:assets`, `output: 'static'`) have been stable since v5.
 
 ### Folder structure
 

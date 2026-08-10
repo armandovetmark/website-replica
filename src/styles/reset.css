@@ -1,0 +1,20 @@
+/* Webflow normalize equivalent — only the rules the ported CSS depends on. */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; min-height: 100vh; }
+img, svg, video { max-width: 100%; display: inline-block; }
+img, video { height: auto; }
+h1, h2, h3, h4, h5, h6, p, figure, blockquote { margin: 0; }
+ul[class], ol[class] { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+input, textarea, select { font: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

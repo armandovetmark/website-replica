@@ -1,0 +1,41 @@
+/* Breakpoints (match Webflow):
+   max-width: 991px | 767px | 479px
+   min-width: 1280px | 1440px | 1920px */
+
+body {
+  font-family: var(--font-body);
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.6;
+  background-color: var(--white);
+}
+
+.container {
+  width: 100%;
+  max-width: 940px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media screen and (min-width: 1280px) { .container { max-width: 1200px; } }
+@media screen and (min-width: 1440px) { .container { max-width: 1300px; } }
+
+.general-section { padding-block: 4rem; }
+.general-section.no-margin { margin: 0; }
+.general-section.new-padding { padding-block: 5rem; }
+.gray-bg { background-color: var(--main-light); }
+.light-blue-bg, .light-blue-bg-copy { background-color: var(--main-soft-o50); }
+.dark-color-bg { background-color: var(--main-dark); }
+
+.text-center { text-align: center; }
+.hide { display: none !important; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Reveal utility — replaces Webflow IX2 scroll animations (see scripts/reveal.ts) */
+.reveal { opacity: 0; transform: translateY(1.25rem); transition: opacity .6s ease, transform .6s ease; }
+.reveal.is-visible { opacity: 1; transform: none; }

@@ -821,6 +821,10 @@ Rules:
 - **READ ONLY.** Only `list_collection_items` and `get_collection_details` are permitted. Never
   call `create_*`, `update_*`, `delete_*`, `publish_*`, or `unpublish_*` against this site.
 - Page with `limit: 100` and `offset`, continuing until you have every item.
+- **Exception — the `blog` collection is capped at 2 items** (project owner's instruction,
+  2026-08-10). Request a single page with `limit: 2`, sorted `lastPublished` descending, and
+  write only those two. Do not page further. Every other collection is exported in full.
+  Note the cap in the report so nobody later mistakes it for a failed export.
 - Skip items where `isArchived` or `isDraft` is true.
 - Write one file per item at `src/content/<collection>/<slug>.json`, shaped exactly as the
   script would produce: `{ id, lastPublished, ...fieldData }`.

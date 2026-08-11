@@ -1,0 +1,35 @@
+---
+// The source site hardcodes a UTC window in a client-side script and hides the
+// element when the window has passed. We evaluate the window at build time
+// instead: with the window inactive, this component emits zero markup and
+// zero JavaScript rather than shipping a dead popup.
+import Modal from './Modal.astro';
+import { scheduledPopup } from '../../config/site';
+
+const now = Date.now();
+const active =
+  scheduledPopup.enabled &&
+  now >= Date.parse(scheduledPopup.start) &&
+  now <= Date.parse(scheduledPopup.end);
+---
+{active && (
+  <>
+    <Modal id="scheduled" labelledBy="scheduled-title">
+      <div class="modal-popup-content">
+        <h2 id="scheduled-title" class="rm-title"><slot name="title">Announcement</slot></h2>
+        <div class="modal-popup-text"><slot /></div>
+      </div>
+    </Modal>
+
+    <script>
+      // Auto-open a scheduled popup once per browser session.
+      const popup = document.querySelector('[data-modal="scheduled"]');
+      if (popup && !sessionStorage.getItem('scheduled-popup-seen')) {
+        sessionStorage.setItem('scheduled-popup-seen', '1');
+        popup.removeAttribute('hidden');
+        popup.classList.add('is-open');
+        document.body.classList.add('has-modal-open');
+      }
+    </script>
+  </>
+)}

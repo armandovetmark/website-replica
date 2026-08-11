@@ -1,0 +1,17 @@
+---
+import Modal from './Modal.astro';
+import { site } from '../../config/site';
+---
+<Modal id="referring-clinics" labelledBy="referring-clinics-title">
+  <div class="modal-popup-content">
+    <h2 id="referring-clinics-title" class="rm-title">Referring Clinics</h2>
+    <p>
+      Refer a patient to {site.name}. Call
+      <a href={site.phoneHref}>{site.phoneDisplay}</a> or submit a request and our team
+      will follow up with scheduling details.
+    </p>
+    <p class="mt-1">
+      <a class="button" href="/general-information-request">Send a referral request</a>
+    </p>
+  </div>
+</Modal>

@@ -2,6 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import CallBar from '../components/layout/CallBar.astro';
+import ReferringClinicsModal from '../components/modals/ReferringClinicsModal.astro';
+import HowdWeDoWidget from '../components/modals/HowdWeDoWidget.astro';
+import ScheduledPopup from '../components/modals/ScheduledPopup.astro';
 ---
 <BaseLayout
   title="The Veterinary Internal Medicine Group | Board Certified Vet Specialist in Miami, FL"
@@ -12,4 +15,11 @@ import CallBar from '../components/layout/CallBar.astro';
     <div data-scroll-sentinel aria-hidden="true"></div>
   </main>
   <CallBar />
+  <ReferringClinicsModal />
+  <HowdWeDoWidget />
+  <ScheduledPopup />
+  <script>
+    import { initModals } from '../scripts/modal';
+    initModals();
+  </script>
 </BaseLayout>

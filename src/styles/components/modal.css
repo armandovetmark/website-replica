@@ -1,0 +1,42 @@
+.modal-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--overlay-color);
+  padding: 1rem;
+}
+.modal-wrapper.is-open { display: flex; }
+
+.modal {
+  background-color: var(--white);
+  border-radius: .5rem;
+  max-width: 40rem;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 2rem;
+}
+
+.modal-close-2 {
+  position: absolute;
+  top: .75rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--main);
+}
+
+body.has-modal-open { overflow: hidden; }
+
+/* How'd We Do widget */
+.rm-modal { text-align: center; }
+.rm-title { font-size: 1.25rem; color: var(--main-dark); margin-bottom: 1.5rem; }
+.rm-options-flex { display: flex; gap: 1rem; justify-content: center; }
+.rm-options-link-block { display: flex; flex-direction: column; align-items: center; gap: .5rem; padding: 1rem; border-radius: .5rem; }
+.rm-options-link-block:hover { background-color: var(--main-light); }
+.rm-options-image { width: 3rem; height: 3rem; }
+.rm-step[hidden] { display: none; }

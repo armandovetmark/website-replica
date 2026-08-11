@@ -1,0 +1,44 @@
+---
+import Modal from './Modal.astro';
+import { site } from '../../config/site';
+
+const reviewUrl = `https://search.google.com/local/writereview?placeid=${site.placeId}`;
+---
+<Modal id="howd-we-do" labelledBy="howd-we-do-title">
+  <div class="rm-modal">
+    <div class="rm-step" data-rm-step="1">
+      <h2 id="howd-we-do-title" class="rm-title">Tell us how we are doing?</h2>
+      <div class="rm-options-flex">
+        <button type="button" class="rm-options-link-block like" data-rm-choice="like">
+          <img src="/icons/paw-like.svg" alt="" class="rm-options-image" />
+          <span class="rm-options-description">Like</span>
+        </button>
+        <button type="button" class="rm-options-link-block dislike" data-rm-choice="dislike">
+          <img src="/icons/paw-dislike.svg" alt="" class="rm-options-image" />
+          <span class="rm-options-description">Dislike</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="rm-step" data-rm-step="like" hidden>
+      <h2 class="rm-title">Wonderful! Would you share that with others?</h2>
+      <a class="button" href={reviewUrl} target="_blank" rel="noopener">Leave a Google review</a>
+    </div>
+
+    <div class="rm-step" data-rm-step="dislike" hidden>
+      <h2 class="rm-title">We're sorry. Tell us what went wrong.</h2>
+      <a class="button" href="/howd-we-do">Send private feedback</a>
+    </div>
+  </div>
+</Modal>
+
+<script>
+  const root = document.querySelector('[data-modal="howd-we-do"]');
+  root?.addEventListener('click', (event) => {
+    const choice = (event.target as HTMLElement).closest<HTMLElement>('[data-rm-choice]');
+    if (!choice) return;
+    for (const step of root.querySelectorAll<HTMLElement>('.rm-step')) {
+      step.hidden = step.dataset.rmStep !== choice.dataset.rmChoice;
+    }
+  });
+</script>

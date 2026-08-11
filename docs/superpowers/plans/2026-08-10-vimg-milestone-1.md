@@ -804,15 +804,34 @@ for (const [name, id] of Object.entries(COLLECTIONS)) {
 }
 ```
 
-- [ ] **Step 4: Run the export**
+- [ ] **Step 4: Populate `src/content/` via the Webflow MCP**
 
-```bash
-WEBFLOW_TOKEN=<token> node scripts/export-webflow-content.mjs
-```
+No `WEBFLOW_TOKEN` is available in this environment, and the project owner chose (2026-08-10)
+to populate content through the read-only Webflow MCP instead of provisioning one.
+`scripts/export-webflow-content.mjs` still ships as the documented re-sync path for whoever
+has a token later; it is **not executed** in this milestone, and the report must say so
+plainly rather than implying it ran.
 
-Expected: one line per collection reporting item counts; `src/content/<collection>/<slug>.json` files created.
+Use the MCP tool `data_cms_tool` with the `list_collection_items` action, once per collection,
+against site `6952729d2807a37cc07c2e29`. Load the tool first via ToolSearch
+(`select:mcp__1da52548-6a2d-4480-98a7-6c56a2b690ef__data_cms_tool`).
 
-If no token is available, stop and ask the user for one — do not fabricate content.
+Rules:
+
+- **READ ONLY.** Only `list_collection_items` and `get_collection_details` are permitted. Never
+  call `create_*`, `update_*`, `delete_*`, `publish_*`, or `unpublish_*` against this site.
+- Page with `limit: 100` and `offset`, continuing until you have every item.
+- Skip items where `isArchived` or `isDraft` is true.
+- Write one file per item at `src/content/<collection>/<slug>.json`, shaped exactly as the
+  script would produce: `{ id, lastPublished, ...fieldData }`.
+- Create the directory for every collection, including any that legitimately return zero items
+  — the test asserts all ten directories exist.
+
+Collection IDs are the same map the script uses (see Step 3).
+
+Expected: ten directories under `src/content/`, with `services` and `doctors` non-empty.
+Report the item count per collection. Do not fabricate, summarise, or invent content — every
+field value must come from the API response.
 
 - [ ] **Step 5: Write `src/content.config.ts`**
 

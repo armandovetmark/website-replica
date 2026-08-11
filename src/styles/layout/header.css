@@ -101,74 +101,115 @@
   inset: 0% 0% auto;
 }
 
-.nav-actions-top {
+/* .nav-actions's real layout rule is keyed on this compound class — without
+   it the flex/justify-content declarations never reach the element. */
+.nav-actions.with-online-pharmacy {
+  grid-column-gap: .5em;
+  grid-row-gap: .5em;
+  border-bottom: 1.5px none var(--white);
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  justify-content: flex-end;
+  margin-top: 0;
+  font-size: .875em;
   display: flex;
-  flex-wrap: wrap;
+}
+
+.nav-actions-top {
+  border-bottom: 1px solid var(--white);
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid var(--white);
+  margin-top: -2px;
   padding-bottom: 6px;
+  display: flex;
 }
 .header.is-scrolled .nav-actions-top { border-bottom-color: var(--main-light); }
 
 .navbar-grid {
-  display: grid;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  grid-template-rows: auto;
   grid-template-columns: .25fr 1fr;
-  margin-inline: 8px;
+  grid-auto-columns: 1fr;
+  margin-bottom: -2px;
+  margin-left: 8px;
+  margin-right: 8px;
+  display: grid;
 }
 .navbar-grid.location-block { width: 203px; }
+.navbar-grid.schedule-block { width: 300px; }
 /* Unconditional on the live site at every breakpoint (no min-width query
    re-enables it) — porting it as-is per "live site wins". */
 .navbar-grid.hours { display: none; }
 
-.practice-info-navbar {
+.practice-information-icon {
+  justify-content: flex-start;
+  align-items: center;
+  width: 40px;
   display: flex;
+}
+.practice-information-icon img { width: 100%; height: auto; }
+
+.practice-info-navbar {
+  color: var(--white);
+  text-align: left;
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  color: var(--white);
   font-size: 14px;
   line-height: 1.5;
+  display: flex;
 }
 .header.is-scrolled .practice-info-navbar { color: var(--text); }
 .practice-info-navbar.schedule { text-align: center; padding-top: 6px; }
 .practice-info-navbar.align-left { justify-content: center; align-items: flex-start; width: 100%; }
 
 .navbar-social-media-icons {
-  display: flex;
+  text-align: center;
   align-items: center;
-  margin-inline: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
 }
 .social-icon-link {
-  display: flex;
+  background-color: var(--main);
+  width: 30px;
+  height: 30px;
+  color: var(--white);
+  border-radius: 100%;
   justify-content: center;
   align-items: center;
-  width: 2.5em;
-  height: 2.5em;
   margin-right: .5em;
-  border-radius: 100%;
-  background-color: var(--main);
-  color: var(--white);
   font-size: 1.25em;
   line-height: 1;
+  display: flex;
 }
 .social-icon-link:hover { background-color: var(--cta-hover); }
-.social-icon { font-size: 14px; }
+/* Facebook/Instagram glyphs are drawn inline (see Header.astro) — the live
+   site pulls them from a `ci-font` icon font we don't ship a codepoint map
+   for. Sized to sit inside the 30px circle above. */
+.social-icon { width: 16px; height: 16px; }
 
 .nav-actions-contact {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr;
+  grid-auto-columns: 1fr;
+  display: grid;
 }
-.nav-actions-contact-desktop { justify-content: center; margin-inline: .5em 10px; }
-.nav-actions-contact-mobile { display: none; }
+.nav-actions-contact.nav-actions-contact-desktop {
+  grid-column-gap: .5em;
+  grid-row-gap: .5em;
+  place-items: center stretch;
+  margin-left: .5em;
+  margin-right: 10px;
+}
+.nav-actions-contact.nav-actions-contact-mobile { display: none; }
 
-.button.navbar-button {
-  padding: 13px 20px;
-  background-color: var(--cta);
-  color: var(--white);
-  border-radius: 2px;
-}
+.button.navbar-button { padding: 13px 20px; background-color: var(--cta); color: var(--white); }
 .button.navbar-button:hover { background-color: var(--cta-hover); }
 .button.navbar-button.secondary { background-color: var(--main); }
 .text-button-navbar { text-transform: uppercase; letter-spacing: 2px; font-size: 12px; }
@@ -179,7 +220,6 @@
   background-color: var(--cta);
   color: var(--white);
   text-align: center;
-  border-radius: 2px;
 }
 .button.button-inline-block.secondary { background-color: var(--main); }
 
@@ -195,8 +235,11 @@
   .header-icon.phone-icon { align-items: center; width: 28px; display: flex; }
   /* Matches the live site: the whole info bar (locations/hours/phone/social
      + desktop CTA buttons) is collapsed below 991px, leaving only the
-     hamburger-driven .nav-menu and the mobile CTA row. */
-  .nav-actions { display: none; }
+     hamburger-driven .nav-menu and the mobile CTA row. Must target the
+     compound class — .nav-actions{display:none} alone loses the
+     specificity fight against the base .nav-actions.with-online-pharmacy
+     rule (2 classes beats 1, regardless of source order). */
+  .nav-actions.with-online-pharmacy { display: none; }
   .nav-actions-contact-desktop { display: none; }
   .nav-actions-contact-mobile {
     display: flex;

@@ -42,25 +42,43 @@ const items = navItems.map((item) =>
         </div>
 
         <div class="div-block">
-          <div class="nav-actions">
+          <div class="nav-actions with-online-pharmacy">
             <div class="nav-actions-top">
               <div class="navbar-grid location-block">
-                {locations.map((l) => (
-                  <a class="practice-info-navbar align-left" href={l.href} target="_blank" rel="noopener">
-                    <span>- {l.label}</span>
-                  </a>
-                ))}
+                <div class="practice-information-icon">
+                  <img src="/icons/map-pin.svg" alt="" width="18" height="18" loading="lazy" />
+                </div>
+                <div class="practice-info-div-block">
+                  {locations.map((l) => (
+                    <a class="practice-info-navbar align-left" href={l.href} target="_blank" rel="noopener">
+                      <span>- {l.label}</span>
+                    </a>
+                  ))}
+                </div>
               </div>
               <div class="navbar-grid hours">
                 <div class="practice-info-navbar schedule" set:html={hoursHtml} />
               </div>
               <div class="navbar-grid">
+                <div class="practice-information-icon">
+                  <img src="/icons/phone.svg" alt="" width="18" height="18" loading="lazy" />
+                </div>
                 <a class="practice-info-navbar" href={site.phoneHref}>{site.phoneDisplay}</a>
               </div>
               <div class="navbar-social-media-icons">
                 {socialLinks.map((s) => (
                   <a class="social-icon-link" href={s.href} target="_blank" rel="noopener" aria-label={s.label}>
-                    <span class={`social-icon ci-font ${s.icon}`} aria-hidden="true"></span>
+                    {s.icon === 'facebook' ? (
+                      <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.55-1.5H17V3.7C16.6 3.65 15.5 3.5 14.2 3.5c-2.7 0-4.5 1.65-4.5 4.65V10H7v3.1h2.7V21h3.8z" />
+                      </svg>
+                    ) : (
+                      <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="2" />
+                        <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2" />
+                        <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
+                      </svg>
+                    )}
                   </a>
                 ))}
               </div>

@@ -1,3 +1,5 @@
+import { isAnyOverlayOpen } from './overlay-lock';
+
 /**
  * Minimal image lightbox replacing Webflow's w-lightbox. Safe to call more
  * than once (mirrors nav.ts / modal.ts / footer-accordion.ts): the overlay
@@ -8,7 +10,9 @@
  */
 function close(doc: Document): void {
   doc.querySelector('.lightbox-overlay')?.classList.remove('is-open');
-  doc.body.classList.remove('has-modal-open');
+  if (!isAnyOverlayOpen(doc)) {
+    doc.body.classList.remove('has-modal-open');
+  }
 }
 
 export function initLightbox(doc: Document = document): void {

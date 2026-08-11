@@ -1,3 +1,5 @@
+import { isAnyOverlayOpen } from './overlay-lock';
+
 const OPEN_CLASS = 'is-open';
 const BODY_CLASS = 'has-modal-open';
 const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -15,7 +17,7 @@ let lastFocused: HTMLElement | null = null;
 function close(wrapper: HTMLElement, doc: Document): void {
   wrapper.classList.remove(OPEN_CLASS);
   wrapper.setAttribute('hidden', '');
-  if (!doc.querySelector(`.${OPEN_CLASS}[data-modal]`)) {
+  if (!isAnyOverlayOpen(doc)) {
     doc.body.classList.remove(BODY_CLASS);
   }
   lastFocused?.focus();

@@ -46,4 +46,14 @@ describe('Header', () => {
   it('links the header phone icon to the practice number', () => {
     expect(doc.querySelector('.header a[href="tel:+17866735903"]')).not.toBeNull();
   });
+
+  it('does not render the hidden Virtual Office Tour child', () => {
+    expect(doc.body.textContent).not.toContain('Virtual Office Tour');
+  });
+
+  it("renders the How'd We Do trigger as a real button with the modal attribute", () => {
+    const trigger = doc.querySelector('.dropdown-link[data-modal-open="howd-we-do"]');
+    expect(trigger).not.toBeNull();
+    expect(trigger?.tagName.toLowerCase()).toBe('button');
+  });
 });

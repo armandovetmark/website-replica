@@ -1,3 +1,12 @@
+/* NOTE for whoever builds the hero/homepage next: this header renders its
+   info bar (locations/hours/phone/social) and the nav links as two stacked
+   rows in normal flow (see `.div-block` below), so it is noticeably taller
+   than the live site's ~186px desktop header. The live site instead floats
+   that content absolutely over the hero via Webflow per-element ID rules
+   that classname-based CSS extraction can't recover — see task-10-report.md
+   for the full writeup. Whatever renders under `<main>` needs to either sit
+   below this header's actual (larger) height or account for `.header`
+   being `position: fixed` with no compensating offset on `<main>`. */
 .header {
   z-index: 999;
   position: fixed;
@@ -181,6 +190,10 @@
   .div-block-17 { display: flex; order: -9999; }
   .header-icon { width: 30px; }
   .header-icon.phone-icon { align-items: center; width: 28px; display: flex; }
+  /* Matches the live site: the whole info bar (locations/hours/phone/social
+     + desktop CTA buttons) is collapsed below 991px, leaving only the
+     hamburger-driven .nav-menu and the mobile CTA row. */
+  .nav-actions { display: none; }
   .nav-actions-contact-desktop { display: none; }
   .nav-actions-contact-mobile {
     display: flex;

@@ -32,7 +32,8 @@
   text-transform: uppercase;
 }
 .header.is-scrolled .nav-link { color: var(--text); }
-.nav-link:hover { color: var(--cta); }
+.nav-link:hover,
+.header.is-scrolled .nav-link:hover { color: var(--cta); }
 
 .nav-link.dropdown-nav-link {
   flex-direction: row-reverse;

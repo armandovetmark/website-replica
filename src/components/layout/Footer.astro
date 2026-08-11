@@ -1,39 +1,68 @@
 ---
-import { site, socialLinks, locations, hoursHtml } from '../../config/site';
+import { getCollection } from 'astro:content';
+import { site, socialLinks, hoursHtml } from '../../config/site';
 import CallBar from './CallBar.astro';
 import GoogleReviews from '../widgets/GoogleReviews.astro';
 import VetstoriaButton from '../widgets/VetstoriaButton.astro';
 import UserWay from '../widgets/UserWay.astro';
 
+const services = await getCollection('services');
 const year = new Date().getFullYear();
 ---
 <footer class="footer">
   <div class="container container-footer">
+    {/* Column set verified against tools/snapshots/home.html, not invented.
+        Seven boxes on the live footer: About Us, Services (CMS), Resources,
+        PHONE, ADDRESS, EMAIL, HOURS.
+
+        Photo Gallery is intentionally omitted from About Us: /photo-gallery
+        is draft:true in Webflow, so the live link is dead. Owner-approved
+        divergence (2026-08-11) — drop it rather than reproduce a broken
+        link. (The header's own "Virtual Office Tour" entry already points
+        at /photo-gallery with hidden:true, so it already renders nothing —
+        left alone.) */}
     <div class="footer-grid-desktop">
-      <div>
-        <h2 class="footer-heading">Contact</h2>
-        <a class="footer-link" href={site.phoneHref}>{site.phoneDisplay}</a>
-        {locations.map((l) => (
-          <a class="footer-link" href={l.href} target="_blank" rel="noopener">{l.label}</a>
+      <div class="footer-box">
+        <div class="footer-heading">About Us</div>
+        <a class="footer-link" href="/meet-the-team">Meet the Team</a>
+        <a class="footer-link" href="/conferences">Conferences</a>
+        <button type="button" class="footer-link" data-modal-open="howd-we-do">How'd we do?</button>
+      </div>
+      <div class="footer-box">
+        <div class="footer-heading">Services</div>
+        {services.map((s) => (
+          <a class="footer-link" href={`/services/${s.data.slug}`}>{s.data.name}</a>
         ))}
       </div>
-      <div>
-        <h2 class="footer-heading">Hours</h2>
-        <div class="footer-link" set:html={hoursHtml} />
-      </div>
-      <div>
-        <h2 class="footer-heading">Explore</h2>
-        <a class="footer-link" href="/services">Services</a>
-        <a class="footer-link" href="/meet-the-team">Meet Our Team</a>
-        <a class="footer-link" href="/clinic-schedule-locations">Pop-Up Clinics</a>
+      <div class="footer-box">
+        <div class="footer-heading">Resources</div>
+        <a class="footer-link" href="/general-information-request">Contact Us</a>
+        <a class="footer-link" href="/appointment-request">Request an Appointment</a>
         <a class="footer-link" href="/blog">Our Blog</a>
-        <a class="footer-link" href="/career-opportunity">Careers</a>
+        <div class="footer-social">
+          {socialLinks.map((s) => (
+            <a class="social-icon-link" href={s.href} target="_blank" rel="noopener" aria-label={s.label}>
+              <span class={`social-icon ci-font footer-social-icon ${s.icon}`} aria-hidden="true"></span>
+            </a>
+          ))}
+        </div>
       </div>
-      <div>
-        <h2 class="footer-heading">Follow</h2>
-        {socialLinks.map((s) => (
-          <a class="footer-link" href={s.href} target="_blank" rel="noopener">{s.label}</a>
-        ))}
+      <div class="footer-box">
+        <div class="footer-heading">PHONE</div>
+        <a class="footer-link" href={site.phoneHref}>{site.phoneDisplay}</a>
+      </div>
+      <div class="footer-box">
+        <div class="footer-heading">ADDRESS</div>
+        <a class="footer-link" href={site.mapUrl} target="_blank" rel="noopener">{site.addressLine1}</a>
+        <a class="footer-link" href={site.mapUrl} target="_blank" rel="noopener">{site.addressLine2}</a>
+      </div>
+      <div class="footer-box">
+        <div class="footer-heading">EMAIL</div>
+        <a class="footer-link" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <div class="footer-box" id="office-hours">
+        <div class="footer-heading">HOURS</div>
+        <div class="footer-link" set:html={hoursHtml} />
       </div>
     </div>
 

@@ -9,11 +9,11 @@
    by default and display:none at max-width:767px. Combined, the badge is not
    actually visible at ANY viewport width on the live site (the parent hides it
    above 767px; the child hides it at/below 767px) — this reads as dead/orphaned
-   CSS, the same kind of leftover the brief told us to skip for
-   .old-footer-new-template. Reproducing "never visible" would defeat the point
-   of building the widget, so this keeps it always visible and reuses the real
-   background/shadow/radius/padding/color values instead of the real display
-   toggles. */
+   CSS. Flagged to the project owner; they confirmed (2026-08-11) they want
+   the badge surfaced regardless, so it's kept always visible here — real
+   background/shadow/radius/padding/font values from .google-reviews-widget-1,
+   just without the display:none toggles that make it unreachable on the
+   live site. */
 
 .google-reviews-widget-wrapper-2 {
   position: fixed;

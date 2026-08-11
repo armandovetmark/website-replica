@@ -5,6 +5,17 @@ describe('site config', () => {
   it('exposes the practice phone number', () => {
     expect(site.phone).toBe('+17866735903');
     expect(site.phoneHref).toBe('tel:+17866735903');
+    // Display and dial numbers differ on the live site — confirmed
+    // intentional by the project owner, not a bug. Pinned here (separately
+    // from phoneHref above) so a future "fix" doesn't quietly reconcile them.
+    expect(site.phoneDisplay).toBe('(305) 677-2015');
+  });
+
+  it('exposes the footer contact details', () => {
+    expect(site.email).toBe('armstrongacvim@gmail.com');
+    expect(site.mapUrl).toBe('https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA');
+    expect(site.addressLine1).toBe('12968 Southwest 132nd Avenue');
+    expect(site.addressLine2).toBe('Miami, FL 33186');
   });
 
   it('exposes GTM and GMB identifiers', () => {

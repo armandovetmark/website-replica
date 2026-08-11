@@ -17,11 +17,33 @@
 
 .footer-grid-desktop {
   display: grid;
-  /* Live site uses a 5-column CMS-driven grid; our config-driven footer has
-     4 static groups (Contact/Hours/Explore/Follow), so the column count is
-     ours, not lifted from home.css. Gap matches the live 2em value. */
-  grid-template-columns: repeat(4, 1fr);
+  /* Live site's own base grid-template-columns is a flat 5-column repeat,
+     sized for its own box count. Our footer has 7 real boxes (About Us,
+     Services, Resources, PHONE, ADDRESS, EMAIL, HOURS — verified against
+     tools/snapshots/home.html), and the Services column's length is
+     CMS-driven, so a fixed column count would either orphan a short last
+     row or force awkward wrapping. auto-fit/minmax adapts to the real box
+     count without hand-tuning a breakpoint per possible total. Gap matches
+     the live 2em value. */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 2rem;
+}
+
+.footer-box {
+  min-width: 0;
+}
+
+.footer-social {
+  display: flex;
+  gap: .5rem;
+  margin-top: .5rem;
+}
+/* Real value from home.css: .social-icon.ci-font.footer-social-icon{font-size:1.25em}
+   (vs. the header's plain .social-icon.ci-font at 14px). Reuses
+   .social-icon-link's circle (layout/header.css) — same convention as
+   Header.astro's social row, not a new pattern. */
+.footer-social-icon {
+  font-size: 1.25em;
 }
 
 .footer-grid-mobile {
@@ -42,9 +64,11 @@
 }
 .footer-link {
   display: block;
+  width: 100%;
   color: var(--white-o85);
   font-size: .875rem;
   padding-block: .25rem;
+  text-align: left;
 }
 .footer-link:hover {
   color: var(--cta);

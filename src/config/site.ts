@@ -21,10 +21,17 @@ export const site = {
   name: 'The Veterinary Internal Medicine Group',
   phone: '+17866735903',
   phoneHref: 'tel:+17866735903',
-  phoneDisplay: '(786) 673-5903',
+  // Display and dial numbers differ on the live site, confirmed intentional by
+  // the project owner (2026-08-11). (305) 677-2015 is what visitors see;
+  // +1 786-673-5903 is what tapping actually calls. Do not "reconcile" these.
+  phoneDisplay: '(305) 677-2015',
   gtmId: 'GTM-WJZMPJ92',
   placeId: 'ChIJhw8-GA3X3ogRu7g-W6oUCQU',
   reviewsApi: 'https://vetmarketing.googlewidget.com/api/reviews',
+  email: 'armstrongacvim@gmail.com',
+  mapUrl: 'https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA',
+  addressLine1: '12968 Southwest 132nd Avenue',
+  addressLine2: 'Miami, FL 33186',
   // Endpoint deferred by decision D6 — forms POST here once chosen.
   formAction: '',
   spanishBanner: 'Hablamos español!',

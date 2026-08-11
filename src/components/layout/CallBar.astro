@@ -1,0 +1,30 @@
+---
+import { callbarItems } from '../../config/site';
+---
+<div class="callbar">
+  {callbarItems.map((item) => {
+    if (item.kind === 'phone') {
+      return (
+        <div class="callbar-link">
+          <a href={item.href} class="callbar-phone" aria-label="Call us">
+            <span class="visually-hidden">Call us</span>
+          </a>
+        </div>
+      );
+    }
+
+    const label = item.label!.split('\n');
+    const box = (
+      <div class={`callbar-link-box${item.href === '/general-information-request' ? ' open-modal-contact' : ''}`}>
+        <img src={`/icons/${item.icon}`} alt="" class="callbar-icon-image" width="21" height="21" loading="lazy" />
+        <p class="callbar-text">{label[0]}<br />{label[1]}</p>
+      </div>
+    );
+
+    return item.kind === 'action' ? (
+      <button type="button" class="callbar-link-2" data-modal-open={item.action}>{box}</button>
+    ) : (
+      <a href={item.href} class="callbar-link w-inline-block">{box}</a>
+    );
+  })}
+</div>

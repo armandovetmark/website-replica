@@ -1,0 +1,62 @@
+.callbar {
+  background-color: var(--main-light);
+  border-top: 2px solid #6b8c3b;
+  padding: .625em .625em .375em;
+  display: none;
+}
+
+.callbar-link,
+.callbar-link-2 {
+  width: 20%;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.callbar-link-box {
+  flex-direction: column;
+  align-items: center;
+  margin-inline: auto;
+  display: flex;
+}
+
+.callbar-link-box.open-modal-contact { padding-left: 9px; }
+
+.callbar-icon-image {
+  width: 1.3125em;
+  height: 1.3125em;
+  margin-bottom: .5em;
+  line-height: 1;
+  object-fit: contain;
+}
+
+.callbar-text {
+  font-size: .75em;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.callbar-phone {
+  background-color: var(--main);
+  background-image: url('/icons/phone.svg');
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 32px 32px;
+  width: 3.75em;
+  height: 3.75em;
+  border-radius: 100%;
+  margin-inline: auto;
+  display: flex;
+}
+
+@media screen and (max-width: 991px) {
+  .callbar {
+    z-index: 50;
+    background-color: var(--cta);
+    align-items: center;
+    display: flex;
+    position: fixed;
+    inset: auto 0 0;
+  }
+}

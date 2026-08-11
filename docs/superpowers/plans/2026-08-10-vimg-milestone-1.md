@@ -1481,6 +1481,14 @@ describe('initHeaderScroll', () => {
     document.body.innerHTML = '<div class="header"></div>';
     expect(() => initHeaderScroll(document)).not.toThrow();
   });
+
+  it('observes only once when called repeatedly', () => {
+    // A second observer on the same sentinel would never be disconnected.
+    initHeaderScroll(document);
+    initHeaderScroll(document);
+    initHeaderScroll(document);
+    expect(observerCount).toBe(1);
+  });
 });
 ```
 
@@ -1498,8 +1506,13 @@ Expected: FAIL — cannot resolve `../../src/scripts/header-scroll`.
  */
 export function initHeaderScroll(doc: Document = document): void {
   const header = doc.querySelector('.header');
-  const sentinel = doc.querySelector('[data-scroll-sentinel]');
+  const sentinel = doc.querySelector<HTMLElement>('[data-scroll-sentinel]');
   if (!header || !sentinel) return;
+
+  // Idempotence: a second call would attach a second, never-disconnected
+  // observer to the same sentinel.
+  if (sentinel.dataset.scrollObserved) return;
+  sentinel.dataset.scrollObserved = 'true';
 
   const observer = new IntersectionObserver(
     (entries) => {

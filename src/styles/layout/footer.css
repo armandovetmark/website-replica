@@ -1,8 +1,12 @@
 /* Authoritative values dumped from tools/snapshots/home.css via extract-css.mjs
-   for: footer, footer-grid-desktop, footer-grid-mobile, footer-bottom-2.
-   extractRules() emits media rules before base rules (reverse of cascade
-   order) — reordered here as base first, then max-width media blocks
-   narrowest-last, matching the source site's own declaration order. */
+   for: footer, footer-grid-desktop, footer-grid-mobile, footer-bottom-2,
+   accordion-trigger, footer-accordion, accordion-header-footer,
+   mobile-footer-heading-2, accordion-icon, accordion-content-footer,
+   footer-links-wrapper, footer-link-2, bottom-accordion, footer-box-2,
+   footer-social-wrapper-2, social-icon-link-4. extractRules() emits media
+   rules before base rules (reverse of cascade order) — reordered here as
+   base first, then max-width media blocks narrowest-last, matching the
+   source site's own declaration order. */
 
 .footer {
   background-color: var(--main-dark);
@@ -74,6 +78,108 @@
   color: var(--cta);
 }
 
+/* Mobile accordion (About Us / Services / Resources), ported from the real
+   .accordion-* / .footer-link-2 / .mobile-footer-heading-2 /
+   .footer-box-2 / .footer-social-wrapper-2 / .social-icon-link-4 rules in
+   home.css — replacing the invented flat-link-list mobile grid from an
+   earlier pass. See src/scripts/footer-accordion.ts for the toggle. */
+
+.accordion-trigger {
+  cursor: pointer;
+}
+
+.accordion-header-footer {
+  /* The live element is a <div> (naturally block/full-width); ours is a
+     real <button> (required for keyboard/AT semantics per the nav-dropdown
+     convention), which defaults to inline-block with centered text. Reset
+     that the same way .footer-link and nav.css's .dropdown-link already do
+     for the same reason. */
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: #fff;
+  background-color: #41aae1;
+  border-radius: .5em;
+  margin-bottom: 1em;
+  padding: 1em 4em 1em 1em;
+  position: relative;
+}
+
+.mobile-footer-heading-2 {
+  display: inline-block;
+  margin-bottom: 1em;
+  font-weight: 600;
+}
+
+/* Chevron — authored, not from home.css. The live icon (.accordion-icon,
+   Webflow's w-icon-dropdown-toggle) is a glyph from the custom icon font
+   ("Custom Icons" / icomoon.ttf) this project doesn't ship, same situation
+   as .new-icon's hand-drawn hamburger in layout/header.css. Drawn as a
+   simple border-arrow instead of porting the real rule's font-size/line-height,
+   which only mattered for sizing a glyph we don't have. */
+.accordion-icon {
+  position: absolute;
+  top: 50%;
+  right: 1em;
+  width: .55em;
+  height: .55em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-65%) rotate(45deg);
+  transition: transform .2s ease;
+}
+.accordion-header-footer[aria-expanded="true"] .accordion-icon {
+  transform: translateY(-35%) rotate(225deg);
+}
+
+/* Closed/open state — authored. The live site drives this with a Webflow
+   IX2 interaction with no static CSS representation; matches the existing
+   .dropdown-list / .dropdown-list.is-open convention in layout/nav.css. */
+.accordion-content-footer {
+  padding-top: 0;
+  overflow: hidden;
+  display: none;
+}
+.accordion-content-footer.is-open {
+  display: block;
+}
+
+.footer-links-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .25em;
+}
+
+.footer-link-2 {
+  display: block;
+  width: 100%;
+  text-align: left;
+  color: #fff;
+}
+/* Real rule is a literal no-op (:hover sets the same #fff already applied) —
+   ported as-is rather than "fixed" into a different hover color. */
+.footer-link-2:hover {
+  color: #fff;
+}
+
+.footer-box-2 {
+  font-size: .875em;
+}
+
+.social-icon-link-4 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3em;
+  height: 3em;
+  margin-right: .5em;
+  border-radius: 100%;
+  background-color: var(--main);
+  color: #fff;
+  font-size: 1.25em;
+  line-height: 1;
+}
+
 .footer-bottom-2 {
   text-align: center;
   text-transform: uppercase;
@@ -87,16 +193,37 @@
      position:fixed at this breakpoint and must never cover our footer's
      last row, regardless of what the token's value is set to elsewhere. */
   .footer { padding-bottom: var(--callbar-height); }
+
+  /* Real-scoped as ≤991px in home.css. Inert until the ≤767px block below
+     actually shows .footer-grid-mobile, but ported at the same breakpoint
+     as the live site rather than widened to unconditional. */
+  .accordion-trigger.footer-accordion { display: none; }
+  .footer-social-wrapper-2 { justify-content: center; display: flex; }
+  .footer-box-2 { margin-top: 2em; }
 }
 
 @media screen and (max-width: 767px) {
   .footer-grid-desktop { display: none; }
   /* Live site switches to display:block here (accordion-driven mobile
-     footer); our mobile grid is a flat link list, so block is equivalent
-     and matches the real toggle more closely than forcing a 1-col grid. */
+     footer, replacing the flat link list from an earlier pass). */
   .footer-grid-mobile { display: block; }
+
+  .accordion-trigger.footer-accordion { margin-bottom: 0; display: block; }
+  .accordion-trigger.footer-accordion.bottom-accordion { border-bottom: 1px solid #fff; }
+  .mobile-footer-heading-2 { margin-bottom: 0; }
+  .accordion-content-footer { margin-bottom: 1em; padding-left: 1em; }
+  /* border-bottom:1px #fff (missing "solid") is exactly what home.css has —
+     porting verbatim rather than "fixing" it to match border-top above it. */
+  .accordion-header-footer {
+    background-color: #0000;
+    border-top: 1px solid #fff;
+    border-bottom: 1px #fff;
+    border-radius: 0;
+    margin-bottom: 0;
+  }
 }
 
 @media screen and (max-width: 479px) {
   .footer { padding-top: 4em; }
+  .social-icon-link-4 { width: 2.5em; height: 2.5em; }
 }

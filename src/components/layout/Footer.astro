@@ -66,14 +66,70 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
+    {/* Mobile block replicates the live accordion (tools/snapshots/home.html,
+        search "footer-grid-mobile") exactly, including what it omits: the
+        live mobile accordion has only About Us / Services / Resources
+        sections plus a trailing social-icon row. PHONE, ADDRESS, EMAIL, and
+        HOURS — present in the desktop grid above — are NOT in the live
+        mobile markup at all. That looks like a real gap on the live site
+        (mobile visitors can't see the phone/address/email/hours in the
+        footer), not something to fill in on our own judgement; flagged for
+        the project owner in the task report. Photo Gallery is omitted here
+        too — the live mobile link for it also carries a literal "hide"
+        class (`footer-link-2 hide`), so the live site hides it in both
+        grids, consistent with the desktop omission above. */}
     <div class="footer-grid-mobile">
-      <a class="footer-link" href={site.phoneHref}>{site.phoneDisplay}</a>
-      <a class="footer-link" href="/services">Services</a>
-      <a class="footer-link" href="/meet-the-team">Meet Our Team</a>
-      <a class="footer-link" href="/general-information-request">Contact</a>
-      {socialLinks.map((s) => (
-        <a class="footer-link" href={s.href} target="_blank" rel="noopener">{s.label}</a>
-      ))}
+      <div class="accordion-trigger footer-accordion">
+        <button type="button" class="accordion-header-footer" aria-expanded="false" aria-controls="mobile-footer-about">
+          <span class="mobile-footer-heading-2">About Us</span>
+          <span class="accordion-icon" aria-hidden="true"></span>
+        </button>
+        <div class="accordion-content-footer" id="mobile-footer-about">
+          <div class="footer-links-wrapper">
+            <a class="footer-link-2" href="/meet-the-team">Meet the Team</a>
+            <a class="footer-link-2" href="/conferences">Conferences</a>
+            <button type="button" class="footer-link-2" data-modal-open="howd-we-do">How'd we do?</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-trigger footer-accordion">
+        <button type="button" class="accordion-header-footer" aria-expanded="false" aria-controls="mobile-footer-services">
+          <span class="mobile-footer-heading-2">Services</span>
+          <span class="accordion-icon" aria-hidden="true"></span>
+        </button>
+        <div class="accordion-content-footer" id="mobile-footer-services">
+          <div class="footer-links-wrapper">
+            {services.map((s) => (
+              <a class="footer-link-2" href={`/services/${s.data.slug}`}>{s.data.name}</a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-trigger footer-accordion bottom-accordion">
+        <button type="button" class="accordion-header-footer" aria-expanded="false" aria-controls="mobile-footer-resources">
+          <span class="mobile-footer-heading-2">Resources</span>
+          <span class="accordion-icon" aria-hidden="true"></span>
+        </button>
+        <div class="accordion-content-footer" id="mobile-footer-resources">
+          <div class="footer-links-wrapper">
+            <a class="footer-link-2" href="/general-information-request">Contact Us</a>
+            <a class="footer-link-2" href="/appointment-request">Request an Appointment</a>
+            <a class="footer-link-2" href="/blog">Our Blog</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-box-2">
+        <div class="footer-social-wrapper-2">
+          {socialLinks.map((s) => (
+            <a class="social-icon-link-4" href={s.href} target="_blank" rel="noopener" aria-label={s.label}>
+              <span class={`social-icon ci-font footer-social-icon ${s.icon}`} aria-hidden="true"></span>
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
 
     <div class="footer-bottom-2">
@@ -86,3 +142,8 @@ const year = new Date().getFullYear();
   <VetstoriaButton />
   <UserWay />
 </footer>
+
+<script>
+  import { initFooterAccordion } from '../../scripts/footer-accordion';
+  initFooterAccordion();
+</script>

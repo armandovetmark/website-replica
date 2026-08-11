@@ -30,28 +30,6 @@ describe('Footer', () => {
     expect(phoneLink!.textContent).toContain('(305) 677-2015');
   });
 
-  it('renders the ADDRESS, EMAIL, and HOURS boxes', () => {
-    const addressLinks = doc.querySelectorAll('footer a[href="https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA"]');
-    expect(addressLinks.length).toBe(2);
-    expect(doc.body.textContent).toContain('12968 Southwest 132nd Avenue');
-    expect(doc.body.textContent).toContain('Miami, FL 33186');
-
-    expect(doc.querySelector('footer a[href="mailto:armstrongacvim@gmail.com"]')).not.toBeNull();
-
-    const hoursBox = doc.querySelector('#office-hours');
-    expect(hoursBox).not.toBeNull();
-    expect(hoursBox!.textContent).toContain('Monday - Friday');
-  });
-
-  it('renders the Services column with all 8 CMS-driven service links', () => {
-    const links = [...doc.querySelectorAll('footer a[href^="/services/"]')];
-    expect(links).toHaveLength(8);
-  });
-
-  it('omits the draft Photo Gallery link (page is draft:true on the live site)', () => {
-    expect(doc.body.textContent).not.toContain('Photo Gallery');
-  });
-
   it('renders the reviews container and write-review link', () => {
     expect(doc.querySelector('#reviews-container')).not.toBeNull();
     expect(doc.querySelector('a[href*="writereview"]')).not.toBeNull();
@@ -78,5 +56,105 @@ describe('Footer', () => {
 
   it('omits the dead legacy footer block', () => {
     expect(doc.querySelector('.old-footer-new-template')).toBeNull();
+  });
+
+  describe('desktop grid (.footer-grid-desktop, ≥768px)', () => {
+    const grid = () => doc.querySelector('.footer-grid-desktop')!;
+
+    it('exists, distinct from the mobile grid', () => {
+      expect(grid()).not.toBeNull();
+      expect(doc.querySelector('.footer-grid-mobile')).not.toBeNull();
+      expect(grid()).not.toBe(doc.querySelector('.footer-grid-mobile'));
+    });
+
+    it('renders all 8 CMS-driven service links', () => {
+      const links = [...grid().querySelectorAll('a[href^="/services/"]')];
+      expect(links).toHaveLength(8);
+    });
+
+    it('renders the ADDRESS, EMAIL, and HOURS boxes', () => {
+      const addressLinks = grid().querySelectorAll('a[href="https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA"]');
+      expect(addressLinks.length).toBe(2);
+      expect(grid().textContent).toContain('12968 Southwest 132nd Avenue');
+      expect(grid().textContent).toContain('Miami, FL 33186');
+
+      expect(grid().querySelector('a[href="mailto:armstrongacvim@gmail.com"]')).not.toBeNull();
+
+      const hoursBox = grid().querySelector('#office-hours');
+      expect(hoursBox).not.toBeNull();
+      expect(hoursBox!.textContent).toContain('Monday - Friday');
+    });
+
+    it('omits the draft Photo Gallery link (page is draft:true on the live site)', () => {
+      expect(grid().textContent).not.toContain('Photo Gallery');
+    });
+  });
+
+  describe('mobile grid (.footer-grid-mobile, ≤767px)', () => {
+    const grid = () => doc.querySelector('.footer-grid-mobile')!;
+
+    it('renders the real 3-section accordion (About Us / Services / Resources), not a flat link list', () => {
+      // Regression guard for the bug this describe block exists to catch: an
+      // earlier pass left .footer-grid-mobile with invented placeholder
+      // content (1 generic /services link, plain-text social links) while
+      // only .footer-grid-desktop got the real 7-box content. linkedom
+      // doesn't evaluate CSS `display`, so a selector scoped to `footer`
+      // alone can't tell which grid is actually visible at a given
+      // breakpoint — these assertions are scoped to .footer-grid-mobile
+      // specifically so a regression here fails even though the desktop
+      // grid (checked above) still looks correct.
+      const triggers = [...grid().querySelectorAll('.accordion-trigger.footer-accordion')];
+      expect(triggers).toHaveLength(3);
+
+      const buttons = [...grid().querySelectorAll('.accordion-header-footer')];
+      expect(buttons).toHaveLength(3);
+      for (const button of buttons) {
+        expect(button.tagName.toLowerCase()).toBe('button');
+        expect(button.getAttribute('aria-expanded')).toBe('false');
+      }
+
+      const headings = [...grid().querySelectorAll('.mobile-footer-heading-2')].map((h) => h.textContent);
+      expect(headings).toEqual(['About Us', 'Services', 'Resources']);
+    });
+
+    it('renders all 8 CMS-driven service links, not the single generic /services link from an earlier pass', () => {
+      const links = [...grid().querySelectorAll('a[href^="/services/"]')];
+      expect(links).toHaveLength(8);
+      expect(grid().querySelector('a[href="/services"]')).toBeNull();
+    });
+
+    it('renders Conferences, How’d we do?, Request an Appointment, and Our Blog — present on the live site but missing from an earlier pass', () => {
+      expect(grid().querySelector('a[href="/conferences"]')).not.toBeNull();
+      expect(grid().querySelector('[data-modal-open="howd-we-do"]')).not.toBeNull();
+      expect(grid().querySelector('a[href="/appointment-request"]')).not.toBeNull();
+      expect(grid().querySelector('a[href="/blog"]')).not.toBeNull();
+    });
+
+    it('does NOT contain PHONE/ADDRESS/EMAIL/HOURS — verified absent from the live mobile accordion too', () => {
+      // Not an oversight: tools/snapshots/home.html's real .footer-grid-mobile
+      // block has no PHONE/ADDRESS/EMAIL/HOURS content at all — only About
+      // Us / Services / Resources sections plus a trailing social row. The
+      // desktop-only PHONE/ADDRESS/EMAIL/HOURS boxes are asserted above,
+      // scoped to .footer-grid-desktop; this asserts the live site's mobile
+      // footer genuinely omits them, so a future pass doesn't "fix" this by
+      // inventing content the live site doesn't have either.
+      expect(grid().querySelector('#office-hours')).toBeNull();
+      expect(grid().querySelector('a[href="mailto:armstrongacvim@gmail.com"]')).toBeNull();
+      expect(grid().querySelector('a[href="https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA"]')).toBeNull();
+      expect(grid().textContent).not.toContain('(305) 677-2015');
+    });
+
+    it('renders the trailing social row with both platforms', () => {
+      const links = [...grid().querySelectorAll('.social-icon-link-4')];
+      expect(links).toHaveLength(2);
+      expect(links.map((a) => a.getAttribute('href'))).toEqual([
+        'https://www.facebook.com/theVIMG/',
+        'https://www.instagram.com/thevimg/',
+      ]);
+    });
+
+    it('omits the draft Photo Gallery link (hidden on the live site in both grids)', () => {
+      expect(grid().textContent).not.toContain('Photo Gallery');
+    });
   });
 });

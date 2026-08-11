@@ -26,8 +26,10 @@
 .google-reviews-widget-1 {
   display: flex;
   align-items: center;
+  /* No `gap` here — not in the live CSS. Spacing between the icon and the
+     reviews container comes entirely from justify-content:space-between,
+     matching the real rule exactly. */
   justify-content: space-between;
-  gap: .5rem;
   width: 300px;
   padding: 10px 30px;
   background-color: #fff;
@@ -53,6 +55,8 @@
 }
 
 @media screen and (max-width: 767px) {
-  .google-reviews-widget-1 { width: 240px; font-size: 12px; padding: 8px 16px; }
+  /* No padding override here — the live CSS keeps padding:10px 30px at every
+     width; only width and font-size change. */
+  .google-reviews-widget-1 { width: 240px; font-size: 12px; }
   .grw-google { max-width: 20px; }
 }

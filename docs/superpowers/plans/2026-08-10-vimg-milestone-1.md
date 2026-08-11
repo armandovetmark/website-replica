@@ -964,9 +964,29 @@ import { join, extname, basename } from 'node:path';
 const CDN = 'https://cdn.prod.website-files.com';
 const UA = 'Mozilla/5.0 (compatible; vimg-replica/1.0)';
 
+/**
+ * Trailing ")" is ambiguous: CSS writes url(https://…/x.svg) so the paren
+ * terminates the URL, but Webflow's duplicate-upload suffix "%20(1).png" contains
+ * a balanced pair that belongs to the filename. Strip only unbalanced ones.
+ */
+function trimTrailingDelimiters(url) {
+  let out = url;
+  while (out.endsWith(')') && (out.split('(').length < out.split(')').length)) {
+    out = out.slice(0, -1);
+  }
+  return out.replace(/[.,;:]+$/, '');
+}
+
 export function collectAssetUrls(text) {
-  const re = new RegExp(`${CDN.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}/[^"')\\s\\\\]+`, 'g');
-  return [...new Set((text.match(re) ?? []).map((u) => u.replace(/&amp;/g, '&')))];
+  // Decode entities BEFORE matching: an attribute written as &quot;…&quot; would
+  // otherwise leak the entity into the match and produce a 404/403 URL.
+  const decoded = text
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;|&apos;/g, "'")
+    .replace(/&amp;/g, '&');
+  // Comma is a delimiter: srcset and data-video-urls join multiple URLs with it.
+  const re = /https:\/\/cdn\.prod\.website-files\.com\/[^"'\s\\,]+/g;
+  return [...new Set((decoded.match(re) ?? []).map(trimTrailingDelimiters))];
 }
 
 /** Webflow prefixes uploads with a 24-char hex id; strip it for readable filenames. */
@@ -991,12 +1011,27 @@ async function main() {
   await mkdir('public/icons', { recursive: true });
 
   const map = {};
+  const used = new Map(); // local filename -> source URL that claimed it
+
   for (const url of urls) {
-    const name = localNameFor(url);
-    const isVector = extname(name).toLowerCase() === '.svg';
-    const dest = isVector ? join('public/icons', name) : join('src/assets', name);
     const res = await fetch(url, { headers: { 'user-agent': UA } });
     if (!res.ok) { console.warn(`SKIP ${url} → ${res.status}`); continue; }
+
+    // Resolve the name only after a successful fetch, so a skipped URL never
+    // reserves a name or reports a collision that did not happen.
+    let name = localNameFor(url);
+    if (used.has(name) && used.get(name) !== url) {
+      // Two distinct assets reduce to the same name once the 24-hex prefix is
+      // stripped. Keep BOTH — silently overwriting loses a real image.
+      const id = (new URL(url).pathname.match(/([0-9a-f]{24})_/)?.[1] ?? '').slice(0, 8);
+      const ext = extname(name);
+      name = `${name.slice(0, name.length - ext.length)}-${id}${ext}`;
+      console.warn(`COLLISION ${url} → disambiguated as ${name}`);
+    }
+    used.set(name, url);
+
+    const isVector = extname(name).toLowerCase() === '.svg';
+    const dest = isVector ? join('public/icons', name) : join('src/assets', name);
     await writeFile(dest, Buffer.from(await res.arrayBuffer()));
     map[url] = isVector ? `/icons/${name}` : `~/assets/${name}`;
   }

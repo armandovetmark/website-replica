@@ -1918,7 +1918,36 @@ Base values are ported from the compiled CSS. The `.is-scrolled` block is new â€
 .div-block-20 { background-color: var(--cta); text-align: center; padding: .25rem 1rem; }
 .paragraph-9 { color: var(--white); font-size: .8125rem; margin: 0; }
 
-.nav-wrapper { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+/* Ported verbatim from the live compiled CSS. The live header is ~186px because
+   .nav-wrapper is a FIXED-height flex row and .div-block is absolutely positioned
+   over it â€” NOT a normal-flow stack of its children. .header's position:fixed is
+   the containing block, so no extra position:relative is needed. Reproducing this
+   is what keeps the header the right height; a normal-flow substitute renders
+   roughly 2.2x too tall. */
+.nav-wrapper {
+  justify-content: space-between;
+  align-items: center;
+  height: 140px;
+  display: flex;
+}
+
+.div-block {
+  z-index: 0;
+  grid-column-gap: 16px;
+  grid-row-gap: 0px;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr;
+  grid-auto-columns: 1fr;
+  margin-top: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: grid;
+  position: absolute;
+  inset: 0% 0% auto;
+}
+
+/* Live CSS hides the hours block unconditionally â€” no min-width query re-enables it. */
+.navbar-grid.hours { display: none; }
 
 .brand { display: inline-flex; align-items: center; }
 .brand .logo-white { display: block; }
@@ -1941,9 +1970,19 @@ Base values are ported from the compiled CSS. The `.is-scrolled` block is new â€
 @media screen and (max-width: 991px) {
   .header { flex-flow: column; justify-content: center; display: flex; }
   .navbar { width: 100%; padding-block: 0; }
+  .nav-wrapper { width: 728px; height: 120px; }
+  .div-block { height: auto; overflow: visible; }
   .div-block-17 { display: flex; }
   .header-icon { width: 30px; }
   .header-icon.phone-icon { align-items: center; width: 28px; display: flex; }
+}
+
+@media screen and (max-width: 767px) {
+  .nav-wrapper { height: 120px; }
+}
+
+@media screen and (max-width: 479px) {
+  .nav-wrapper { grid-column-gap: 16px; grid-row-gap: 16px; height: 120px; }
 }
 ```
 

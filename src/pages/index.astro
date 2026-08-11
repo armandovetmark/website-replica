@@ -5,6 +5,8 @@ import Footer from '../components/layout/Footer.astro';
 import ReferringClinicsModal from '../components/modals/ReferringClinicsModal.astro';
 import HowdWeDoWidget from '../components/modals/HowdWeDoWidget.astro';
 import ScheduledPopup from '../components/modals/ScheduledPopup.astro';
+import Hero from '../components/home/Hero.astro';
+import Collage from '../components/home/Collage.astro';
 ---
 <BaseLayout
   title="The Veterinary Internal Medicine Group | Board Certified Vet Specialist in Miami, FL"
@@ -13,6 +15,8 @@ import ScheduledPopup from '../components/modals/ScheduledPopup.astro';
   <Header />
   <main class="content">
     <div data-scroll-sentinel aria-hidden="true"></div>
+    <Hero />
+    <Collage />
   </main>
   <Footer />
   <ReferringClinicsModal />
@@ -20,6 +24,10 @@ import ScheduledPopup from '../components/modals/ScheduledPopup.astro';
   <ScheduledPopup />
   <script>
     import { initModals } from '../scripts/modal';
+    import { initReveal } from '../scripts/reveal';
+    import { initLightbox } from '../scripts/lightbox';
     initModals();
+    initReveal();
+    initLightbox();
   </script>
 </BaseLayout>

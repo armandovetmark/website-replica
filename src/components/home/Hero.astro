@@ -1,0 +1,46 @@
+---
+import { Image } from 'astro:assets';
+import heroPoster from '~/assets/6952729d2807a37cc07c2e29-698b6b7dec253c8613eb24a8_66f6ee246985660b01302ef4_6012044_Dog_Animal_1920x1080_poster.0000000.jpg';
+import heroMp4 from '~/assets/6952729d2807a37cc07c2e29-698b6b7dec253c8613eb24a8_66f6ee246985660b01302ef4_6012044_Dog_Animal_1920x1080_mp4.mp4';
+import heroWebm from '~/assets/6952729d2807a37cc07c2e29-698b6b7dec253c8613eb24a8_66f6ee246985660b01302ef4_6012044_Dog_Animal_1920x1080_webm.webm';
+import heroLogo from '~/assets/vimg-logowhite3.png';
+---
+<!--
+  Live markup has NO <h1> — the only heading in .hero-content is the <h6
+  class="heading-41">. "WELCOME TO" lives in .hero-tagline-home, not a
+  heading at all. Replicated as published per the standing "port what's
+  live" rule; this is a genuine SEO gap on the live site (see task-13
+  report), not something to silently fix by promoting the h6.
+-->
+<div class="hero">
+  <div class="hero-background">
+    <video autoplay muted loop playsinline poster={heroPoster.src}>
+      <source src={heroMp4} type="video/mp4" />
+      <source src={heroWebm} type="video/webm" />
+    </video>
+    <div class="container container-hero-home-page">
+      <div class="hero-content">
+        <div class="hero-tagline-home reveal">WELCOME TO</div>
+        <Image src={heroLogo} alt="" class="image" loading="lazy" />
+        <h6 class="heading-41">internal medicine consults &amp; ultrasounds</h6>
+        <p class="paragraph-4">
+          Pet owners can book pop-up clinic appointments directly. For in-clinic imaging, please
+          contact your veterinarian or referring clinic.
+        </p>
+        <div class="cta-wrapper cta-wrapper-flex-home hero reveal">
+          <a href="/clinic-schedule-locations" class="button grow-if-possible">
+            <div class="text-button">Pop-up Clinics</div>
+          </a>
+          <a
+            href="https://yourviewdr.com/user-manager/users/login"
+            target="_blank"
+            rel="noopener"
+            class="button whithe-version services-button"
+          >
+            <div class="text-button">Veterinary Clinics &amp; Referrals</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

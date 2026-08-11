@@ -40,3 +40,25 @@ body.has-modal-open { overflow: hidden; }
 .rm-options-link-block:hover { background-color: var(--main-light); }
 .rm-options-image { width: 3rem; height: 3rem; }
 .rm-step[hidden] { display: none; }
+
+/* Collage lightbox (src/scripts/lightbox.ts) — replaces Webflow's w-lightbox */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--overlay-color);
+  padding: 2rem;
+}
+.lightbox-overlay.is-open { display: flex; }
+.lightbox-overlay img { max-width: 100%; max-height: 90vh; object-fit: contain; }
+.lightbox-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--white);
+}

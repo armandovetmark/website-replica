@@ -1,0 +1,32 @@
+---
+import { Image } from 'astro:assets';
+import fd4a9937 from '~/assets/FD4A9937.jpg';
+import untitled1 from '~/assets/Untitled-1.jpg';
+import untitled2 from '~/assets/Untitled-2.jpg';
+
+// Live markup: 3 w-lightbox anchors in .gallery-grid, none carrying the
+// scroll-reveal opacity:0 marker (unlike .hero-tagline-home / .cta-wrapper
+// above), so no `.reveal` here. Each anchor's own Webflow w-json lightbox
+// config ships with an empty "items" array on the live site — worth flagging
+// as an odd/likely-broken live behavior — but the intent (click a thumbnail,
+// see it enlarged) is unambiguous, so each is wired to a working lightbox
+// pointing at its own full-resolution image.
+const photos = [
+  { image: fd4a9937, class: 'office-gallery-lightbox' },
+  { image: untitled1, class: 'office-gallery-lightbox side-images' },
+  { image: untitled2, class: 'office-gallery-lightbox side-images' },
+];
+---
+<div class="general-section no-margin gray-bg">
+  <div class="container collage-container">
+    <div class="mt-2">
+      <div class="gallery-grid">
+        {photos.map((photo) => (
+          <a href={photo.image.src} data-lightbox class={photo.class}>
+            <Image src={photo.image} alt="" class="office-gallery-thumbnail gallery" loading="lazy" />
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,176 @@
+/* Homepage hero. Source: tools/snapshots/home.css, classes .hero,
+   .hero-background, .container-hero-home-page, .hero-content,
+   .hero-tagline-home, .heading-41, .paragraph-4, .cta-wrapper-flex-home,
+   .image, .button(+modifiers), .text-button. */
+
+.hero { text-align: center; }
+
+/* .hero-background replaces Webflow's .w-background-video wrapper (which
+   absolutely-positions its child <video> full-bleed behind the content via
+   z-index:-100). position/overflow here and the video rule below reproduce
+   that stacking for the real <video> element the brief calls for, using the
+   literal values from home.css's `.w-background-video` / `.w-background-video>video`
+   rules — the class itself isn't kept since it's Webflow runtime plumbing,
+   but the geometry it produced is. */
+.hero-background {
+  position: relative;
+  overflow: hidden;
+  background-image: linear-gradient(#0006, #0006);
+  justify-content: center;
+  align-items: stretch;
+  height: 100vh;
+  min-height: 750px;
+  display: flex;
+}
+.hero-background video {
+  position: absolute;
+  inset: 0;
+  z-index: -100;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.container.container-hero-home-page {
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+  display: flex;
+}
+
+.hero-content { margin-top: 60px; font-size: 1.5em; }
+
+.hero-tagline-home {
+  letter-spacing: 2px;
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 25px;
+}
+
+.image { width: 312px; }
+
+.heading-41 {
+  /* .heading-41 itself only sets text-transform; the rest (margin-top,
+     font-size, font-weight, line-height) comes from home.css's generic
+     `h6{margin-top:.5em;font-size:1em;font-weight:700;line-height:1.75}`
+     typography default, which reset.css deliberately doesn't restore
+     (it only zeroes h1-h6 margin). Folded in here since this is the first
+     component to use an h6. */
+  margin-top: .5em;
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 1.75;
+  text-transform: capitalize;
+}
+
+.paragraph-4 {
+  /* Same situation as .heading-41 above: home.css's generic
+     `p{margin-top:0;margin-bottom:1em}` default, which paragraph-4 doesn't
+     override itself and reset.css zeroes globally. */
+  margin-top: 0;
+  margin-bottom: 1em;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.cta-wrapper.cta-wrapper-flex-home {
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  justify-content: center;
+  place-items: center;
+  margin-top: 40px;
+  display: grid;
+}
+
+.cta-wrapper.cta-wrapper-flex-home.hero {
+  grid-column-gap: 34px;
+  grid-row-gap: 34px;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-flow: dense;
+  justify-content: space-between;
+  place-items: center end;
+  max-width: 710px;
+  display: flex;
+}
+
+.button {
+  background-color: var(--cta);
+  color: #fff;
+  text-align: center;
+  border-radius: 2em;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 34px;
+  font-weight: 500;
+  line-height: 1.125;
+  text-decoration: none;
+  transition: background-color .2s ease-in;
+  display: flex;
+}
+.button:hover { box-shadow: 0 4px 9px #000; }
+
+.button.grow-if-possible { flex: 1; justify-content: center; }
+
+.button.whithe-version { background-color: var(--white); color: var(--cta); }
+.button.whithe-version.services-button { text-shadow: none; }
+.button.whithe-version.services-button:hover {
+  background-color: var(--secondary);
+  box-shadow: 0 4px 9px #000;
+}
+
+.text-button {
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 991px) {
+  .container.container-hero-home-page { margin-top: 100px; }
+  .hero-background { min-height: 850px; }
+  .hero-content { margin-top: 0; }
+  .hero-tagline-home { margin-bottom: 20px; }
+  .cta-wrapper.cta-wrapper-flex-home.hero {
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
+    flex-flow: column;
+    align-items: stretch;
+    margin-top: 24px;
+  }
+  .button { font-size: 1em; }
+}
+
+@media screen and (max-width: 767px) {
+  .container.container-hero-home-page { margin-top: 20px; }
+  .hero-content { margin-top: 3vh; }
+  .hero-tagline-home { margin-bottom: 18px; font-size: 18px; }
+  .heading-41 { line-height: 1.1; }
+  .paragraph-4 { font-size: 17px; line-height: 25px; }
+  .text-button { font-size: 14px; }
+  .image { width: 250px; }
+  .button { font-size: .9em; }
+}
+
+@media screen and (max-width: 479px) {
+  .container.container-hero-home-page { margin-top: -54px; }
+  .hero-background { height: 80vh; }
+  .hero-tagline-home { font-size: 16px; }
+  .heading-41 { font-size: 23px; }
+  .paragraph-4 { font-size: 16px; }
+  .image { width: 260px; }
+  .cta-wrapper.cta-wrapper-flex-home { grid-template-columns: 1fr; }
+  .cta-wrapper.cta-wrapper-flex-home.hero {
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
+    flex-flow: column;
+    align-items: stretch;
+    display: flex;
+  }
+}

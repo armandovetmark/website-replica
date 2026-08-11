@@ -1,0 +1,37 @@
+---
+// Generic inner-page banner. Ported verbatim from
+// tools/snapshots/meet-the-team.html (search "page-header") — the same
+// .page-header markup Webflow reuses across every non-homepage page on the
+// live site, so this is built as a shared component from the start rather
+// than inlined into the About page.
+//
+// The live <h2> here carries no class at all ("<h2>About<br/></h2>"),
+// including a trailing, seemingly pointless <br/> after the text with
+// nothing following it — kept verbatim per the "don't silently fix what
+// looks unintentional" rule. Its visual size comes entirely from the
+// generic site-wide h2 default (home.css / meet-the-team.css:
+// h2{margin-top:0;margin-bottom:.5em;font-size:2.5em;font-weight:700;
+// line-height:1.25}), which reset.css deliberately doesn't restore — scoped
+// onto `.page-header-content h2` in meet-the-team.css rather than added as a
+// bare global h2 rule, same convention as .content-rt.doctor-bio-home p.
+import { Image, type ImageMetadata } from 'astro:assets';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  image: ImageMetadata;
+}
+
+const { eyebrow, title, image } = Astro.props;
+---
+
+<div class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <h2>{eyebrow}<br /></h2>
+      <h1 class="display-1 banner-title">{title}</h1>
+    </div>
+  </div>
+  <div class="page-header-overlay"></div>
+  <Image src={image} alt="" class="page-header-background-image" loading="lazy" />
+</div>

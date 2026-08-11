@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ReferringClinicsModal from '../components/modals/ReferringClinicsModal.astro';
+import HowdWeDoWidget from '../components/modals/HowdWeDoWidget.astro';
+import ScheduledPopup from '../components/modals/ScheduledPopup.astro';
+import PageHeader from '../components/sections/PageHeader.astro';
+import DoctorProfile from '../components/about/DoctorProfile.astro';
+import AboutUs from '../components/about/AboutUs.astro';
+import StaffSection from '../components/about/StaffSection.astro';
+import AppointmentCta from '../components/sections/AppointmentCta.astro';
+import pageHeaderImage from '~/assets/template-main-cover-image.jpg';
+---
+<BaseLayout
+  title="Meet Our Doctor | Dr. Armstrong"
+  description="Meet Dr. Pedro F. Armstrong, board-certified veterinary internal medicine specialist (DACVIM-SAIM) providing diagnostics and consultations in Miami, FL."
+>
+  <Header />
+  <main class="content">
+    <div data-scroll-sentinel aria-hidden="true"></div>
+    <PageHeader eyebrow="About" title="The veterinary internal medicine group" image={pageHeaderImage} />
+    <DoctorProfile />
+    <AboutUs />
+    <StaffSection />
+    <AppointmentCta />
+  </main>
+  <Footer />
+  <ReferringClinicsModal />
+  <HowdWeDoWidget />
+  <ScheduledPopup />
+  <script>
+    import { initModals } from '../scripts/modal';
+    import { initReveal } from '../scripts/reveal';
+    initModals();
+    initReveal();
+  </script>
+</BaseLayout>

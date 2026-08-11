@@ -1,0 +1,61 @@
+---
+// "Why Board-Certified Matters" blurb + the Staff grid. Ported verbatim from
+// tools/snapshots/meet-the-team.html (search "meet-the-team-stafff" — note
+// the live triple-f typo in that class, kept as-is).
+//
+// Despite a `staff` collection existing in the CMS, this section on the live
+// page is static markup — there is no w-dyn-list here, just one hardcoded
+// .div-block-3 card for Kathy G. Reproduced static per the brief rather than
+// wired to getCollection('staff').
+//
+// Kathy's <h1 class="staff-name"> is the SECOND <h1> on this page (the page
+// header's "The veterinary internal medicine group" is the first) — a real
+// duplicate-h1 accessibility/SEO issue on the live site, replicated
+// deliberately rather than silently demoted to an h2. See the about-page
+// report.
+import staffImage from '~/assets/FD4A0017.jpg';
+import { Image } from 'astro:assets';
+---
+
+<div class="general-section no-margin new-padding dark-color-bg">
+  <div class="container meet-the-team-stafff">
+    <div class="text-center margin-15">
+      <h4 class="section-title-top white center">Board certification isn&rsquo;t a title, it&rsquo;s a standard.</h4>
+      <h2 class="section-title white">Why Board-Certified Matters</h2>
+      <div class="section-line-animation-div">
+        <div class="color-line white"></div>
+      </div>
+    </div>
+    <div class="center-content">
+      <p class="about-the-team-paragraph">
+        A board-certified internal medicine specialist (DACVIM-SAIM) has completed extensive advanced training
+        beyond veterinary school, including a competitive residency and rigorous examinations. While many providers
+        offer &ldquo;specialty&rdquo; services after short courses, board certification represents a higher standard
+        of expertise and that difference matters when your pet&rsquo;s health is on the line. At VIMG, diagnostics
+        and recommendations are performed and interpreted by the specialist who sees your pet, in real time,
+        leading to clearer answers, fewer unnecessary procedures, and care that always puts your pet first.
+      </p>
+      <h2 class="section-title white">Staff</h2>
+      <div class="w-layout-grid staff-members-grid">
+        <div class="div-block-3">
+          <Image src={staffImage} alt="" class="image-5" loading="lazy" />
+          <h1 class="staff-name">Kathy G.</h1>
+          <div class="section-line-animation-team-div">
+            <div class="color-line-services"></div>
+          </div>
+          <div class="staff-position">Manager</div>
+          <p class="staff-bio">
+            Kathy has been a dedicated Veterinary Technician since 2010. She earned her Associate of Science degree
+            in Veterinary Technology and has gained valuable experience in emergency, general practice, and
+            specialty veterinary settings. She brings years of hands-on experience and a genuine love for animals
+            and to everything she does.<br /><br />
+            She is now thrilled to step into a leadership role and looks forward to serving as Practice Manager at
+            VIMG, where she can help guide the team while continuing to provide excellent care for pets and their
+            families. In her free time, she enjoys playing the piano, singing, and making outdoor memories with her
+            husband and kids.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

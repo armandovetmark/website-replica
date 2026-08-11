@@ -1,0 +1,62 @@
+---
+// Meet-the-team doctor bio + the two dark call-to-action banners beneath it.
+// Ported verbatim from tools/snapshots/meet-the-team.html (search
+// "doctors-flex-copy" / "call-to-action-know-u-re-doctor").
+//
+// The live markup renders the doctor image TWICE — a `w-condition-invisible`
+// (hidden) copy of "Doctor's Headshot" plus a visible one, both pointing at
+// the exact same CMS image URL for this single-doctor collection. That's
+// Webflow's conditional-visibility plumbing for a secondary-image field, not
+// real content; DoctorsSection.astro (the homepage's own doctor card,
+// same CMS collection) already established the precedent of rendering just
+// the one visible image, so this follows suit rather than duplicating a
+// node that's `display:none` either way.
+//
+// .doctors-flex-copy has live :nth-child(odd)/:first-child rules that only
+// matter with 2+ doctors alternating layout direction — with exactly one
+// .w-dyn-item (this collection has one entry) those selectors still apply
+// (1st child is odd), so they're ported in meet-the-team.css and NOT
+// special-cased here; the single doctor naturally gets the "odd" grid
+// direction and zero top margin.
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import armstrongImage from '~/assets/695d7c22dc2639cdc6bae787_armstrong.jpg';
+import resumePdf from '~/assets/Pedro Armstrong Giusti.pdf?url';
+
+const [doctor] = await getCollection('doctors');
+---
+
+<div class="general-section no-margin new-padding">
+  <div class="container doctors-section">
+    <div class="w-dyn-list">
+      <div role="list" class="w-dyn-items">
+        <div role="listitem" class="w-dyn-item">
+          <div class="doctors-flex-copy">
+            <div class="doctor-box-image-wrapper meet-the-doctor">
+              <Image src={armstrongImage} alt="Doctor's Headshot" class="image-fluid rounded-corners" loading="lazy" />
+            </div>
+            <div class="doctor-box-content">
+              <div class="doctor-box-heading-wrapper">
+                <div class="pre-heading">Meet</div>
+                <h2 class="heading-40 doctors-bio">{doctor.data.name}</h2>
+                <div class="content-rt doctors-bio w-richtext" set:html={doctor.data.bio} />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="w-richtext" set:html={doctor.data['bio-part-2']} />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="call-to-action-know-u-re-doctor">
+      <h2 class="display-6 white-text aa">Explore Dr. Armstrong&rsquo;s education, clinical Experience and professional background.</h2>
+      <a href={resumePdf} target="_blank" rel="noopener" class="button button-color">View Resume &amp; Credentials</a>
+    </div>
+    <div class="call-to-action-know-u-re-doctor">
+      <h2 class="display-6 white-text aa">Check the full list of conferences attended and spoken on by Dr. Armstrong across the world/international</h2>
+      <a href="/conferences" class="button button-color">View Conferences</a>
+    </div>
+  </div>
+</div>

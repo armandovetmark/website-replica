@@ -27,7 +27,18 @@ body {
 .light-blue-bg, .light-blue-bg-copy { background-color: var(--main-soft-o50); }
 .dark-color-bg { background-color: var(--main-dark); }
 
-.text-center { text-align: center; }
+/* Full live rule (home.css, base/unconditioned, no media override found):
+   .text-center{text-align:center;flex-direction:column;align-items:center;
+   display:flex}. Only text-align was ported originally; flex-direction/
+   align-items/display were dropped. No component used this class until
+   PracticeInfo.astro (Task 14), which needs it to center its heading block,
+   so completing it here rather than inventing a component-local variant. */
+.text-center {
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+}
 .hide { display: none !important; }
 
 .visually-hidden {

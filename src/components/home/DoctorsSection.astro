@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+import { Image, type ImageMetadata } from 'astro:assets';
+import armstrongImage from '~/assets/695d7c22dc2639cdc6bae787_armstrong.jpg';
+import acvimBadge from '~/assets/ACVIM_Diplomate_RGBL_H (1).png';
+
+// astro:assets requires a statically-imported ImageMetadata for local,
+// build-optimized images — it can't resolve a runtime CMS URL string to a
+// mirrored asset. With only one doctors/*.json entry today this map has one
+// key, but it's slug-keyed (not hardcoded to the single entry) so a second
+// mirrored doctor just needs its import added here.
+const doctorImages: Record<string, ImageMetadata> = {
+  doctor: armstrongImage,
+};
+
+const doctors = (await getCollection('doctors'))
+  .sort((a, b) => String(a.data.name).localeCompare(String(b.data.name)));
+---
+<div class="general-section no-margin new-padding light-blue-bg-copy">
+  <div class="container doctors-section-home">
+    <div class="collection-list-wrapper-2 w-dyn-list">
+      <div role="list" class="w-dyn-items">
+        {doctors.map((doctor) => (
+          <div role="listitem" class="doctors-section-grid w-dyn-item">
+            <div class="doctor-image-wrapper doctor-image-home reveal">
+              <Image
+                src={doctorImages[doctor.data.slug]}
+                alt="Doctor's Headshot"
+                class="grid-image"
+                loading="lazy"
+              />
+            </div>
+            <div class="content-grid-wrapper doctors-bio-home reveal">
+              <div class="div-block-8">
+                <h4 class="section-title-top">Skillful, Compassionate care</h4>
+                <h2 class="display-2">{doctor.data.name}</h2>
+                <div class="content-rt doctor-bio-home w-richtext" set:html={doctor.data['bio-short']} />
+              </div>
+              <Image src={acvimBadge} alt="" />
+              <div class="cti-wrapper met-the-doctor-home">
+                <div class="inline-block">
+                  <a href="/meet-the-team" class="button">
+                    <div>More About&#160; </div>
+                    <div>{doctor.data['short-name']}</div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>

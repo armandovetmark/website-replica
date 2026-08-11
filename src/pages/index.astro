@@ -7,6 +7,9 @@ import HowdWeDoWidget from '../components/modals/HowdWeDoWidget.astro';
 import ScheduledPopup from '../components/modals/ScheduledPopup.astro';
 import Hero from '../components/home/Hero.astro';
 import Collage from '../components/home/Collage.astro';
+import PracticeInfo from '../components/home/PracticeInfo.astro';
+import DoctorsSection from '../components/home/DoctorsSection.astro';
+import ServicesGrid from '../components/home/ServicesGrid.astro';
 ---
 <BaseLayout
   title="The Veterinary Internal Medicine Group | Board Certified Vet Specialist in Miami, FL"
@@ -17,6 +20,9 @@ import Collage from '../components/home/Collage.astro';
     <div data-scroll-sentinel aria-hidden="true"></div>
     <Hero />
     <Collage />
+    <PracticeInfo />
+    <DoctorsSection />
+    <ServicesGrid />
   </main>
   <Footer />
   <ReferringClinicsModal />

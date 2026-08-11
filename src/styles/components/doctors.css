@@ -1,0 +1,152 @@
+/* Homepage doctors section. Source: tools/snapshots/home.css, classes
+   .doctors-section-home, .collection-list-wrapper-2, .doctors-section-grid,
+   .doctor-image-wrapper(+.doctor-image-home), .grid-image,
+   .content-grid-wrapper(+.doctors-bio-home), .div-block-8, .content-rt
+   (+.doctor-bio-home), .cti-wrapper(+.met-the-doctor-home), .inline-block,
+   .display-2. .section-title-top (h4) is already defined in
+   practice-info.css — this section reuses the same class verbatim.
+   .general-section.no-margin.new-padding.light-blue-bg-copy and .container
+   base rules already exist in src/styles/base.css. */
+
+.container.doctors-section-home {
+  max-width: 1170px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.collection-list-wrapper-2 { width: 100%; }
+
+.doctors-section-grid {
+  grid-column-gap: 2em;
+  grid-row-gap: 2em;
+  grid-template-rows: auto;
+  grid-template-columns: 50% 40%;
+  grid-auto-columns: 1fr;
+  justify-content: stretch;
+  display: grid;
+}
+
+.doctor-image-wrapper.doctor-image-home {
+  /* .doctor-image-wrapper's own base rule sets object-fit:cover, which is a
+     no-op here since it's a div, not an img/video — ported verbatim anyway
+     per the "don't silently fix odd-looking live values" rule. */
+  object-fit: cover;
+  border-radius: 100%;
+  width: 100%;
+  height: 600px;
+  max-width: 575px;
+  overflow: hidden;
+}
+
+.grid-image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.content-grid-wrapper.doctors-bio-home {
+  width: 100%;
+  margin-left: 25px;
+}
+
+/* .div-block-8 has no declared rule above 991px on the live site — it's a
+   plain block div at desktop widths. */
+
+.content-rt.doctor-bio-home {
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+
+.content-rt.doctor-bio-home p {
+  /* The bio text is raw richtext HTML from the CMS (rendered via set:html),
+     so its <p> carries no class of its own. Same situation as .paragraph-4
+     in hero.css: home.css's generic p{margin-top:0;margin-bottom:1em}
+     default, which reset.css zeroes and doesn't restore, scoped here instead
+     of folded into a class since there isn't one on the element itself. */
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.cti-wrapper.met-the-doctor-home { margin-top: 2em; }
+
+.inline-block { display: inline-block; }
+
+.display-2 {
+  /* .display-2 itself only sets font-size/font-weight; margin-top,
+     margin-bottom, and line-height come from home.css's generic
+     h2{margin-top:0;margin-bottom:.5em;font-size:2.5em;font-weight:700;
+     line-height:1.25} default (reset.css zeroes h1-h6 margin and doesn't
+     restore it) — same situation as .heading-41 in hero.css. font-size and
+     font-weight are still .display-2's own, since a class selector always
+     beats the bare h2 element selector regardless of source order. */
+  margin-top: 0;
+  margin-bottom: .5em;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+@media screen and (max-width: 991px) {
+  .container.doctors-section-home { padding-left: 10px; padding-right: 10px; }
+  .doctors-section-grid {
+    flex-flow: wrap-reverse;
+    grid-template-columns: 100%;
+    justify-content: center;
+    display: flex;
+  }
+  .doctor-image-wrapper.doctor-image-home {
+    order: 1;
+    width: 80%;
+    height: 500px;
+    max-width: none;
+    margin-bottom: 0;
+  }
+  .content-grid-wrapper.doctors-bio-home {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0;
+    display: flex;
+  }
+  .div-block-8 {
+    grid-column-gap: 8px;
+    grid-row-gap: 8px;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    display: flex;
+  }
+  .content-rt.doctor-bio-home { margin-top: -10px; text-align: left; width: 100%; }
+  .cti-wrapper.met-the-doctor-home { text-align: center; margin-top: 0; }
+  .display-2 { text-align: left; }
+}
+
+@media screen and (max-width: 767px) {
+  .container.doctors-section-home { padding-left: 10px; padding-right: 10px; }
+  .grid-image { margin-left: 0; margin-right: 0; }
+  .doctor-image-wrapper.doctor-image-home { height: 400px; margin-left: 0; margin-right: 0; }
+  .doctors-section-grid { grid-template-columns: 1fr; }
+  .content-rt.doctor-bio-home { text-align: left; }
+}
+
+@media screen and (max-width: 479px) {
+  .container.doctors-section-home { padding-left: 0; padding-right: 0; }
+  .doctor-image-wrapper.doctor-image-home {
+    order: 1;
+    width: 100%;
+    height: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .div-block-8 { width: 100%; }
+  .display-2 { font-size: 2em; }
+}
+
+@media screen and (min-width: 1280px) {
+  .container.doctors-section-home { max-width: 1228px; padding-left: 2em; padding-right: 2em; }
+  .doctors-section-grid { grid-template-columns: 1fr .75fr; }
+  .doctor-image-wrapper.doctor-image-home { width: 575px; }
+  .content-grid-wrapper.doctors-bio-home { margin-left: 0; }
+}

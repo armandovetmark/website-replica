@@ -1,0 +1,60 @@
+---
+// Live markup check: .services-homepage-grid has no w-dyn-list/w-dyn-item —
+// it is static markup, not CMS-driven, contrary to the task-14 brief. All 8
+// services/*.json entries carry featured:false, and these three cards' copy
+// doesn't match any collection item name, confirming it's hand-authored.
+// Ported verbatim from tools/snapshots/home.html, including the icon URLs
+// (mapped to their mirrored /icons/*.svg paths via tools/snapshots/asset-map.json).
+const cards = [
+  {
+    icon: '/icons/icon-service_ultrasounds (1).svg',
+    heading: 'Abdominal ultrasounds',
+    paragraph:
+      'Performed by ACVIM board-certified specialist Dr. Armstrong, ultrasounds provide real-time evaluation of abdominal organs, with findings explained and next steps discussed on the spot.',
+    copy: 'Ultrasound procedures are covered by insurance — please contact your provider for details.',
+    href: '/services/ultrasound',
+  },
+  {
+    icon: '/icons/icon-service_Mass removal.svg',
+    heading: 'Internal Medicine consults',
+    paragraph:
+      'Our internal medicine consults focus on solving complex medical problems through careful evaluation and advanced diagnostics. By working directly with pets and their owners, we provide clear, same-day recommendations tailored to each patient.',
+    copy: null,
+    href: '/services/internal-medicine-consults',
+  },
+  {
+    icon: '/icons/icon-service_In-House Overnight  Diagnostics.svg',
+    heading: 'Educate owners about specialists',
+    paragraph:
+      'We believe informed owners make better decisions. We take time to explain what board-certification entails, when specialty care is needed, what it involves, and how it helps, so you can move forward with confidence and clarity.',
+    copy: null,
+    href: '/services/specialty-vet-care-education',
+  },
+];
+---
+<section class="general-section no-margin new-padding">
+  <div class="container services-section">
+    <div class="services-homepage-grid">
+      {cards.map((card) => (
+        <div class="services-div-block reveal">
+          <img src={card.icon} loading="lazy" alt="" class="graphic-icon homepage" />
+          <h3 class="featured-service-heading">{card.heading}</h3>
+          <div class="section-line-animation-services-div">
+            <div style="width:20%" class="color-line-services"></div>
+          </div>
+          <p class="paragraph home-services">
+            {card.paragraph}
+            <br />
+          </p>
+          {card.copy && (
+            <p class="paragraph-copy">
+              {card.copy}
+              <br />
+            </p>
+          )}
+          <a href={card.href} class="button blue-text">Learn More</a>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

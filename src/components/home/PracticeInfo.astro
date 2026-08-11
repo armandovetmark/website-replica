@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import practiceImage9 from '~/assets/1680028744419.jpeg';
+import practiceImage3 from '~/assets/31180616-9038-4212-9f3e-c34e83bc80492.JPG';
+
+// Live markup: no CMS field on the practiceInformation collection matches this
+// heading/copy (checked the-veterinary-internal-medicine-group-vimg.json —
+// it only has contact/hours/review-link fields), so this section is genuinely
+// static on the live site, not collection-driven. Ported verbatim from
+// tools/snapshots/home.html. Both `data-w-id` attributes on the live markup
+// carry no `style="opacity:0"`, so neither element is a scroll-reveal target
+// (unlike the doctor/service cards below) — no `.reveal` here, matching how
+// Collage.astro left its non-marked elements alone.
+---
+<div class="general-section no-margin new-padding">
+  <div class="container practice-information-container">
+    <div class="text-center margin-50">
+      <h4 class="section-title-top">Your pet's health is our priority</h4>
+      <h2 class="section-title">
+        The only mobile board-certified ultrasound service in Dade and Monroe County
+      </h2>
+      <div class="section-line-animation-div">
+        <div class="color-line"></div>
+      </div>
+    </div>
+    <div class="content-center">
+      <div class="text-block-practice-information">
+        <p class="paragraph first-section-home">
+          <strong>The Veterinary Internal Medicine Group (VIMG)</strong> proudly serves{' '}
+          <strong>Greater Miami-Dade and Monroe counties</strong>. We are committed to providing
+          expert, compassionate care, doing everything in our hands to protect the health and
+          well-being of your four-legged family members. Our goal is to deliver clear answers,
+          thoughtful guidance, and specialty-level medicine that helps your pet live a healthier,
+          more comfortable life-honoring the unconditional love they give every day.
+        </p>
+        <div class="center-content">
+          <Image src={practiceImage9} alt="" class="image-9" loading="lazy" />
+        </div>
+      </div>
+      <div class="image-practice-information">
+        <Image src={practiceImage3} alt="" class="image-3" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</div>

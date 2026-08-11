@@ -1,0 +1,104 @@
+/* Homepage services grid. Source: tools/snapshots/home.css, classes
+   .services-section, .services-homepage-grid, .services-div-block,
+   .graphic-icon(+.homepage), .featured-service-heading, .paragraph-copy,
+   .section-line-animation-services-div, .color-line-services,
+   .button.blue-text. .paragraph.home-services reuses the bare .paragraph
+   rule already defined in practice-info.css (that class has no rule of its
+   own beyond it). The wrapping .general-section.no-margin.new-padding and
+   .container base rules already exist in src/styles/base.css.
+
+   The live markup wraps this grid in .w-layout-grid, a Webflow base utility
+   (display:grid; grid-row-gap:16px; grid-auto-columns:1fr) that isn't kept
+   as a class here (pure Designer plumbing, like .w-background-video in
+   hero.css) — but unlike .w-container elsewhere, it isn't redundant with
+   anything else on this element, so its properties are folded directly into
+   .services-homepage-grid below instead of being silently dropped. */
+
+.container.services-section {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.services-homepage-grid {
+  display: grid;
+  grid-row-gap: 16px;
+  grid-auto-columns: 1fr;
+  grid-column-gap: 2.5em;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.services-div-block {
+  background-color: var(--white);
+  border: 1px solid #eee;
+  border-radius: 8px;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 25px;
+  display: flex;
+  box-shadow: 0 2px 14px #1818180d;
+}
+
+.graphic-icon { filter: hue-rotate(); }
+.graphic-icon.homepage { filter: hue-rotate(315deg); width: 4em; }
+
+.featured-service-heading {
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.25;
+}
+
+.section-line-animation-services-div {
+  background-color: var(--light-grey);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 1px;
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.color-line-services {
+  background-color: var(--main);
+  width: 20%;
+  height: 3px;
+}
+
+.paragraph-copy {
+  /* Same generic-p-default situation as .paragraph in practice-info.css. */
+  margin-top: 0;
+  margin-bottom: 1em;
+  text-align: center;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 20px;
+}
+
+.button.blue-text { color: var(--cta); background-color: #0000; }
+.button.blue-text:hover { box-shadow: none; color: var(--main-dark); }
+
+@media screen and (max-width: 991px) {
+  .container.services-section { padding-left: 10px; padding-right: 10px; }
+  .services-homepage-grid { grid-column-gap: 16px; }
+  .paragraph-copy { width: 95%; }
+}
+
+@media screen and (max-width: 767px) {
+  .services-homepage-grid { grid-column-gap: 18px; grid-row-gap: 18px; grid-template-columns: 1fr; }
+  .paragraph-copy { width: 100%; }
+}
+
+@media screen and (min-width: 1280px) {
+  .container.services-section { padding-left: 3em; padding-right: 3em; }
+  .services-homepage-grid { margin-top: 10px; }
+}
+
+@media screen and (min-width: 1440px) {
+  .services-div-block { padding: 32px; }
+  .paragraph-copy { width: auto; }
+}

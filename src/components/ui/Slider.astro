@@ -1,0 +1,22 @@
+---
+// Generic scroll-snap slider shell, replacing Webflow's JS-driven
+// .w-slider/.mask/.slide/.left-arrow/.right-arrow/.slide-nav runtime (that
+// translateX + autoplay engine ships with webflow.js, which this project
+// doesn't load — same exception already applied to .w-lightbox and the
+// IX2 .reveal classes elsewhere). This wrapper is authored, not ported:
+// its CSS (src/styles/components/slider.css) doesn't trace to
+// tools/snapshots/home.css. Content placed in the default slot keeps its
+// own real Webflow classes for visual styling (see Testimonials.astro).
+interface Props {
+  id: string;
+}
+const { id } = Astro.props;
+---
+
+<div class="slider" data-slider id={id}>
+  <div class="slider-track" data-slider-track>
+    <slot />
+  </div>
+  <button type="button" class="slider-arrow prev" data-slider-prev aria-label="Previous slide">‹</button>
+  <button type="button" class="slider-arrow next" data-slider-next aria-label="Next slide">›</button>
+</div>

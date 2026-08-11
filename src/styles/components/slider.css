@@ -1,0 +1,35 @@
+/* Authored scroll-snap slider mechanics — see Slider.astro for why these
+   don't trace to tools/snapshots/home.css. Reuses .slider as a class name
+   (the live site also has a class called .slider, for its own JS-driven
+   mechanism we don't ship) but with entirely different, authored values. */
+
+.slider { position: relative; }
+
+.slider-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.slider-track::-webkit-scrollbar { display: none; }
+.slider-track > * { flex: 0 0 100%; scroll-snap-align: start; }
+
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 100%;
+  background-color: var(--white);
+  box-shadow: 0 2px 8px var(--shadow);
+  color: var(--main-dark);
+}
+.slider-arrow.prev { left: -1.25rem; }
+.slider-arrow.next { right: -1.25rem; }
+
+@media screen and (max-width: 767px) {
+  .slider-arrow.prev { left: .25rem; }
+  .slider-arrow.next { right: .25rem; }
+}

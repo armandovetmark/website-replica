@@ -20,6 +20,15 @@
   font-weight: 400;
 }
 
+/* .white variant — first used by AppointmentCta.astro and Testimonials.astro
+   (both sit on dark/overlaid backgrounds), defined here alongside the base
+   rule it modifies. */
+.section-title-top.white {
+  color: var(--white);
+  text-align: left;
+  display: inline;
+}
+
 .section-title {
   text-transform: uppercase;
   margin-top: 10px;
@@ -92,6 +101,7 @@
   .paragraph { width: 95%; }
   .paragraph.first-section-home { width: 90%; }
   .image-practice-information { width: 80%; height: 500px; }
+  .section-title-top.white.center { text-align: center; }
 }
 
 @media screen and (max-width: 767px) {
@@ -100,6 +110,7 @@
   .paragraph { width: 100%; }
   .paragraph.first-section-home { text-align: center; width: 90%; }
   .image-practice-information { margin-top: 20px; margin-bottom: 20px; }
+  .section-title-top.white { text-align: center; }
 }
 
 @media screen and (max-width: 479px) {
@@ -114,8 +125,10 @@
   .section-title { margin-top: 10px; }
   .paragraph { width: 930px; }
   .paragraph.first-section-home { width: auto; }
+  .section-title-top.white { padding-left: 10px; display: block; }
 }
 
 @media screen and (min-width: 1440px) {
   .paragraph { width: auto; }
+  .section-title-top.white { padding-left: 0; }
 }

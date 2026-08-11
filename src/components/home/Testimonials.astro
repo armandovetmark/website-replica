@@ -1,0 +1,164 @@
+---
+import Slider from '../ui/Slider.astro';
+
+interface NameEntry {
+  text: string;
+  href?: string;
+}
+interface Testimonial {
+  paragraph: string;
+  names: NameEntry[];
+}
+
+// Copied verbatim from tools/snapshots/home.html (search
+// "testimonial-container") — do not paraphrase, shorten, or correct typos
+// in these real customer reviews. Reproduced individually rather than
+// normalised: some slides carry only a reviewer name, others add a second
+// <h3> naming the reviewer's clinic, and the first review's name links out
+// to the reviewer's Google Maps profile (no target/rel on the live anchor,
+// so none added here either).
+const testimonials: Testimonial[] = [
+  {
+    paragraph:
+      "They have provided excellent care for my senior dog after moving recently into the area. The veterinarians are thorough in their exams and proved expertive advise on care on many conditions my dog is experiencing. The staff is also very friendly and easy to work with on the phone and in person.",
+    names: [
+      { text: "JM Cammisa", href: "https://www.google.com/maps/contrib/107100684916674982743/reviews?hl=en-GB" },
+    ],
+  },
+  {
+    paragraph:
+      "Outstanding bedside manner, very kind, knowledgeable and professional! Everything was clearly explained in language I could understand!",
+    names: [
+      { text: "Veterinarian" },
+      { text: "VCA Aventura" },
+    ],
+  },
+  {
+    paragraph:
+      "Professional.",
+    names: [
+      { text: "Arthur Greene" },
+      { text: "Homestead Animal Hospital" },
+    ],
+  },
+  {
+    paragraph:
+      "Highly experienced, very knowledgeable, skilled in ultrasonography. Love that the doctor will speak directly to the client about any findings from ultrasound. Always very friendly and professional. Always on time.",
+    names: [
+      { text: "Veterinarian" },
+      { text: "Banfield Davie" },
+    ],
+  },
+  {
+    paragraph:
+      "Clean animal hospital with a very attentive, knowledgeable and friendly staff. Doctors are great with the patient and their owners as they take their time in making sure you understand your dog's condition. Definitely would recommend to anyone in need of a vet.",
+    names: [
+      { text: "Veterinarian" },
+      { text: "Trail Animal Hospital" },
+    ],
+  },
+  {
+    paragraph:
+      "Professional and creative. Always informative and willing to answer all my questions. Dr. Armstrong and his team are very friendly and casual making it easy to continue communication while building trust. They are always happy to be involved in my cases.",
+    names: [
+      { text: "Veterinarian" },
+      { text: "Banfield Pet Hospital" },
+    ],
+  },
+  {
+    paragraph:
+      "Sincere, friendly and professional! Great service! Thank you for coming on such short notice.",
+    names: [
+      { text: "Anaelys Concepcion" },
+      { text: "Banfield University Centre" },
+    ],
+  },
+  {
+    paragraph:
+      "Dr Armstrong and his team are very professional and accessible. They provide a fast response with the appointments and also with the complete and clear reports. Be fan of R Madrid :)",
+    names: [
+      { text: "Covadonga Talavera" },
+      { text: "VCA South Dade Animal Hospital" },
+    ],
+  },
+  {
+    paragraph:
+      "Great! Easy to get an appointment, staff were very helpful. Doctor and tech were very knowledgeable and helpful. Great opportunity and we will continue to utilize the services in the future.",
+    names: [
+      { text: "Veterinarian" },
+      { text: "Banfield 5096" },
+    ],
+  },
+  {
+    paragraph:
+      "Very friendly, professional, and prepared. The team was punctual and great at communicating with the primary DVM in real time. Again, VERY professional. We appreciated that Dr. Armstrong communicated directly with the clients.",
+    names: [
+      { text: "Veterinarian" },
+      { text: "Camelot Animal Hospital" },
+    ],
+  },
+  {
+    paragraph:
+      "I am so impressed with Dr. Armstrong. He is exceptional. As he performed my cat’s ultrasound, I asked several questions. Dr. Armstrong patiently & clearly answered. Because of my experience with Dr. Armstrong, I will always recommend VIMG. None at this time. My experience was great.",
+    names: [
+      { text: "Ellen Coulton" },
+      { text: "South Miami Animal Clinic" },
+    ],
+  },
+  {
+    paragraph:
+      "This was your third trip here. The dogs and I very much enjoy your company — you’re both professional and very personable. You are always professional, courteous, and fun! 👍 Great 👍 Since you have a 10 rating that says it all!",
+    names: [
+      { text: "Suzanna Grace" },
+      { text: "Manual Health Care People & Pet’s Inc." },
+    ],
+  },
+  {
+    paragraph:
+      "Awesome! Thank you guys. Great team! Thanks for helping us and our pets. Bilingual. Great opportunity, opened doors. You ALL are very professional and friendly. It was a pleasure to meet you. There is always room for improvement but so far I don’t see any deficiency! Thank you.",
+    names: [
+      { text: "Veterinarian" },
+      { text: "Banfield Pet Hospital" },
+    ],
+  },
+  {
+    paragraph:
+      "Excellent.",
+    names: [
+      { text: "Jorge Tonarely" },
+      { text: "Ponce de Leon Animal Clinic" },
+    ],
+  },
+];
+---
+
+<section class="general-section no-margin new-padding light-blue-bg">
+  <div class="container testimonial-container">
+    <div class="text-center margin-40">
+      <h4 class="section-title-top white">SUCCESS STORIES</h4>
+      <h2 class="section-title">REVIEWS &amp; TESTIMONIALS</h2>
+      <div class="section-line-animation-div">
+        <div class="color-line" style="width:20%"></div>
+      </div>
+    </div>
+
+    <Slider id="testimonials">
+      {testimonials.map((t) => (
+        <div class="slide">
+          <div class="testimonial">
+            <p class="paragraph testimonial-paragraph">{t.paragraph}</p>
+            {t.names.map((n) => (
+              <h3 class="patients-name-testimonial">
+                {n.href ? (
+                  <a href={n.href} class="link-2"><strong>{n.text}</strong></a>
+                ) : (
+                  n.text
+                )}
+              </h3>
+            ))}
+          </div>
+        </div>
+      ))}
+    </Slider>
+  </div>
+</section>

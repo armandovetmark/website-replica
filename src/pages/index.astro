@@ -10,6 +10,8 @@ import Collage from '../components/home/Collage.astro';
 import PracticeInfo from '../components/home/PracticeInfo.astro';
 import DoctorsSection from '../components/home/DoctorsSection.astro';
 import ServicesGrid from '../components/home/ServicesGrid.astro';
+import AppointmentCta from '../components/home/AppointmentCta.astro';
+import Testimonials from '../components/home/Testimonials.astro';
 ---
 <BaseLayout
   title="The Veterinary Internal Medicine Group | Board Certified Vet Specialist in Miami, FL"
@@ -23,6 +25,8 @@ import ServicesGrid from '../components/home/ServicesGrid.astro';
     <PracticeInfo />
     <DoctorsSection />
     <ServicesGrid />
+    <AppointmentCta />
+    <Testimonials />
   </main>
   <Footer />
   <ReferringClinicsModal />
@@ -32,8 +36,10 @@ import ServicesGrid from '../components/home/ServicesGrid.astro';
     import { initModals } from '../scripts/modal';
     import { initReveal } from '../scripts/reveal';
     import { initLightbox } from '../scripts/lightbox';
+    import { initSlider } from '../scripts/slider';
     initModals();
     initReveal();
     initLightbox();
+    initSlider();
   </script>
 </BaseLayout>

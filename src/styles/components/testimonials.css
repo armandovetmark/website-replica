@@ -1,0 +1,79 @@
+/* Homepage testimonials/reviews section. Source: tools/snapshots/home.css,
+   classes .testimonial-container, .testimonial, .patients-name-testimonial,
+   .link-2 (shared with .link). .text-center(+.margin-40), .section-title,
+   .section-line-animation-div/.color-line, and .section-title-top(+.white)
+   are shared with src/styles/components/practice-info.css and reused as-is.
+   .paragraph.testimonial-paragraph reuses the bare .paragraph rule already
+   defined there too (that compound class has no unconditioned rule of its
+   own on the live site, only the media overrides below).
+
+   The generic slider mechanics (.slider/.slider-track/.slider-arrow,
+   replacing Webflow's JS-driven .w-slider/.mask/.slide/.left-arrow/
+   .right-arrow/.slide-nav) live in src/styles/components/slider.css instead
+   — those Webflow classes only make sense with webflow.js's translateX
+   runtime we don't ship, same exception already applied to .w-lightbox and
+   the IX2 .reveal classes. .slide is still applied to each slide (below)
+   for its own real, independent base rule. */
+
+.container.testimonial-container {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.testimonial {
+  background-color: #0000;
+  border-radius: 2em;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  padding: 0 5em;
+  display: flex;
+}
+
+.patients-name-testimonial {
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.link,
+.link-2 { color: var(--white); }
+
+@media screen and (max-width: 991px) {
+  .container.testimonial-container { padding-left: 0; padding-right: 0; }
+  .paragraph.testimonial-paragraph { width: 90%; }
+  .patients-name-testimonial { text-align: center; }
+  .testimonial { padding-left: 0; padding-right: 0; }
+}
+
+@media screen and (max-width: 767px) {
+  .container.testimonial-container {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+  }
+  .paragraph.testimonial-paragraph { width: 100%; }
+  .patients-name-testimonial { text-align: center; }
+  .testimonial { padding-left: 3em; padding-right: 3em; }
+}
+
+@media screen and (max-width: 479px) {
+  .container.testimonial-container { padding-left: 10px; padding-right: 10px; }
+  .paragraph.testimonial-paragraph { font-size: .95em; }
+  .patients-name-testimonial { text-align: center; margin-top: .5em; font-size: 15px; }
+  .testimonial { margin-bottom: 1.5em; padding-left: 0; padding-right: 0; }
+}
+
+@media screen and (min-width: 1280px) {
+  .container.testimonial-container { padding-top: 4px; padding-left: 4em; padding-right: 4em; }
+}

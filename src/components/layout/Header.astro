@@ -1,0 +1,100 @@
+---
+import { getCollection } from 'astro:content';
+import { navItems, site, socialLinks, locations, hoursHtml } from '../../config/site';
+import Nav from './Nav.astro';
+import logoWhite from '~/assets/vimg-logowhite3.png';
+import logoColor from '~/assets/vimg-logo5.png';
+import { Image } from 'astro:assets';
+
+const services = await getCollection('services');
+const items = navItems.map((item) =>
+  item.label === 'Services'
+    ? {
+        ...item,
+        children: services.map((s) => ({
+          label: String(s.data.name),
+          href: `/services/${s.data.slug}`,
+        })),
+      }
+    : item,
+);
+---
+<div class="header">
+  <div class="div-block-20">
+    <p class="paragraph-9">{site.spanishBanner}</p>
+  </div>
+
+  <div class="navbar">
+    <div class="container navbar-container">
+      <div class="nav-wrapper">
+        <a href="/" class="brand" aria-label={site.name}>
+          <Image src={logoWhite} alt={site.name} class="logo-white" loading="eager" />
+          <Image src={logoColor} alt={site.name} class="logo" loading="eager" />
+        </a>
+
+        <div class="div-block-17">
+          <button type="button" class="menu-button" aria-expanded="false" aria-label="Open menu">
+            <span class="new-icon" aria-hidden="true"></span>
+          </button>
+          <a href={site.phoneHref} class="header-phone-mobile" aria-label={`Call ${site.phoneDisplay}`}>
+            <span class="header-icon phone-icon" aria-hidden="true"></span>
+          </a>
+        </div>
+
+        <div class="div-block">
+          <div class="nav-actions">
+            <div class="nav-actions-top">
+              <div class="navbar-grid location-block">
+                {locations.map((l) => (
+                  <a class="practice-info-navbar align-left" href={l.href} target="_blank" rel="noopener">
+                    <span>- {l.label}</span>
+                  </a>
+                ))}
+              </div>
+              <div class="navbar-grid hours">
+                <div class="practice-info-navbar schedule" set:html={hoursHtml} />
+              </div>
+              <div class="navbar-grid">
+                <a class="practice-info-navbar" href={site.phoneHref}>{site.phoneDisplay}</a>
+              </div>
+              <div class="navbar-social-media-icons">
+                {socialLinks.map((s) => (
+                  <a class="social-icon-link" href={s.href} target="_blank" rel="noopener" aria-label={s.label}>
+                    <span class={`social-icon ci-font ${s.icon}`} aria-hidden="true"></span>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div class="nav-actions-contact nav-actions-contact-desktop">
+              <a href="/clinic-schedule-locations" class="button navbar-button">
+                <div class="text-button-navbar">Pop-up clinics</div>
+              </a>
+              <button type="button" class="button navbar-button secondary" data-modal-open="referring-clinics">
+                <div class="text-button-navbar">Referring Clinics</div>
+              </button>
+            </div>
+          </div>
+
+          <Nav items={items} />
+
+          <div class="nav-actions-contact nav-actions-contact-mobile">
+            <a href="/clinic-schedule-locations" class="button button-inline-block herader">
+              <div>Pop-Up Clinics</div>
+            </a>
+            <button type="button" class="button button-inline-block herader secondary" data-modal-open="referring-clinics">
+              <div>Referring Clinics</div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initHeaderScroll } from '../../scripts/header-scroll';
+  import { initNav } from '../../scripts/nav';
+  initHeaderScroll();
+  initNav();
+</script>

@@ -1,0 +1,33 @@
+---
+import type { NavItem } from '../../config/site';
+
+interface Props { items: NavItem[] }
+const { items } = Astro.props;
+---
+<nav class="nav-menu w-nav-menu">
+  {items.filter((i) => !i.hidden).map((item) => (
+    <div class="line-animation-block">
+      {item.children && item.children.length > 0 ? (
+        <div class="dropdown-wrapper w-dropdown">
+          <button type="button" class="nav-link dropdown-nav-link w-dropdown-toggle" aria-expanded="false">
+            <span class="dropdown-nav-link-icon" aria-hidden="true"></span>
+            <span>{item.label}</span>
+          </button>
+          <nav class="dropdown-list w-dropdown-list">
+            <div class="dropdown-menu">
+              {item.children.filter((c) => !c.hidden).map((child) => (
+                child.action
+                  ? <button type="button" class="dropdown-link" data-modal-open={child.action}>{child.label}</button>
+                  : <a class="dropdown-link" href={child.href}>{child.label}</a>
+              ))}
+              {item.href && <a class="dropdown-link" href={item.href}>All {item.label}</a>}
+            </div>
+          </nav>
+        </div>
+      ) : (
+        <a class="nav-link w-nav-link" href={item.href}>{item.label}</a>
+      )}
+      <div class="line-animation-navbar"></div>
+    </div>
+  ))}
+</nav>

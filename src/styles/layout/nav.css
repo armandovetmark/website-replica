@@ -1,0 +1,122 @@
+/* Webflow dropdown/nav framework classes that ride along in the markup
+   (.w-dropdown, .w-dropdown-toggle, .w-dropdown-list, .w-nav-link,
+   .w-nav-menu) — ported from the compiled framework CSS. The
+   site-specific classes below sit alongside them on the same elements
+   and take over on any property both touch. */
+.w-dropdown { text-align: left; z-index: 900; display: inline-block; position: relative; }
+.w-dropdown-toggle { cursor: pointer; user-select: none; display: inline-block; position: relative; }
+.w-dropdown-toggle:focus { outline: 0; }
+.w-dropdown-list { display: none; position: absolute; }
+.w-nav-link { display: inline-block; position: relative; text-decoration: none; }
+.w-nav-menu { position: relative; }
+
+.nav-menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.25rem;
+  font-size: .875em;
+}
+.line-animation-block { position: relative; }
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: .5em .625rem;
+  color: var(--white);
+  letter-spacing: .5px;
+  font-size: 14.5px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+.header.is-scrolled .nav-link { color: var(--text); }
+.nav-link:hover { color: var(--cta); }
+
+.nav-link.dropdown-nav-link {
+  flex-direction: row-reverse;
+  padding-block: .5em;
+}
+
+.line-animation-navbar {
+  width: 0%;
+  height: 1.5px;
+  background-color: var(--white);
+  transition: width .3s ease;
+}
+.header.is-scrolled .line-animation-navbar { background-color: var(--cta); }
+/* The live site grows this on hover via an IX2 interaction with no static
+   CSS equivalent; a plain :hover rule stands in for it here. */
+.line-animation-block:hover .line-animation-navbar { width: 100%; }
+
+.dropdown-wrapper { position: relative; }
+.dropdown-nav-link-icon {
+  width: .5rem;
+  height: .5rem;
+  margin-left: .5em;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.dropdown-list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 18em;
+  background-color: transparent;
+  z-index: 10;
+}
+.dropdown-list.is-open { display: block; }
+
+.dropdown-menu {
+  display: inline-block;
+  background-color: var(--white);
+  box-shadow: 0 4px 16px var(--shadow);
+  min-width: 230px;
+  max-width: 20em;
+  max-height: 75vh;
+  padding-block: .5rem;
+  overflow: auto;
+}
+.dropdown-link {
+  display: block;
+  width: 100%;
+  padding: .5em 1em;
+  color: var(--text);
+  text-align: left;
+  font-size: .875rem;
+}
+.dropdown-link:hover { color: var(--main); border-radius: 1em; }
+
+@media screen and (max-width: 991px) {
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-height: 75vh;
+    margin-top: 0;
+    padding-block: 10px;
+    background-color: var(--white);
+    overflow: auto;
+  }
+  .nav-menu.is-open { display: flex; }
+  .nav-link { color: var(--main); justify-content: center; padding-block: 10px; }
+  .nav-link.dropdown-nav-link { justify-content: flex-end; }
+  .header.is-scrolled .nav-link { color: var(--main); }
+  .dropdown-list { position: static; min-width: 0; }
+  .dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: none;
+    max-height: none;
+    overflow: visible;
+  }
+  .line-animation-navbar { display: none; }
+}

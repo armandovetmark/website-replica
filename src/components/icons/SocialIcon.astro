@@ -1,0 +1,23 @@
+---
+// Facebook/Instagram glyphs, extracted from Header.astro (Task 10) so
+// Footer.astro's desktop and mobile social rows can render real icons too
+// instead of the live site's empty `.ci-font` icon-font placeholders (that
+// font isn't shipped in this build). Not a live-CSS value — a practical
+// substitute for a glyph we can't reproduce, same as Task 10's original.
+interface Props {
+  platform: string;
+  class?: string;
+}
+const { platform, class: className } = Astro.props;
+---
+{platform === 'facebook' ? (
+  <svg class={className} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.55-1.5H17V3.7C16.6 3.65 15.5 3.5 14.2 3.5c-2.7 0-4.5 1.65-4.5 4.65V10H7v3.1h2.7V21h3.8z" />
+  </svg>
+) : (
+  <svg class={className} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
+  </svg>
+)}

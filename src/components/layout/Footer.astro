@@ -1,83 +1,95 @@
 ---
 import { getCollection } from 'astro:content';
-import { site, socialLinks, hoursHtml } from '../../config/site';
+import { socialLinks, sortByServiceOrder } from '../../config/site';
 import CallBar from './CallBar.astro';
 import GoogleReviews from '../widgets/GoogleReviews.astro';
 import VetstoriaButton from '../widgets/VetstoriaButton.astro';
 import UserWay from '../widgets/UserWay.astro';
+import SocialIcon from '../icons/SocialIcon.astro';
+import { Image } from 'astro:assets';
+import footerBadge from '~/assets/697795a18df67465edd361bb_1680028744419.png';
 
-const services = await getCollection('services');
-const year = new Date().getFullYear();
+// Corrected 2026-08-11 against the project owner's own side-by-side diff of
+// the live footer: an earlier pass had mis-extracted the PHONE / ADDRESS /
+// EMAIL / HOURS boxes as part of the visible footer. They actually live
+// inside `.old-footer-new-template`, a hidden (`.hide`) dead block that is
+// NOT reproduced anywhere in this file (verified: `.old-footer-new-template`
+// never appears below) — those four boxes never existed on the real footer
+// and are gone for good, not merged elsewhere.
+//
+// The real visible footer is `.footer-grid-desktop` with exactly 4
+// `.footer-box-2` children (About Us, Services, Resources, and an unheaded
+// badge/social box) inside `.container-2.container-footer` — verified
+// directly against tools/snapshots/home.html. It uses the `-2` class
+// variants throughout (`footer-heading-2`, `footer-link-2`, `footer-box-2`);
+// the non-`-2` names exist in home.css too, but only inside the dead block
+// above, styled for a light background — not used here.
+const services = sortByServiceOrder(await getCollection('services'));
+
+// Live order for this one box is Instagram before Facebook, opposite of the
+// header's social row and the socialLinks array order — confirmed in both
+// the desktop (`.social-icon-link-3`) and mobile (`.social-icon-link-4`)
+// markup in tools/snapshots/home.html. Reversed once here for both boxes
+// rather than reordering the shared `socialLinks` array, which would also
+// flip the header's (correctly Facebook-first) row.
+const footerSocialLinks = [...socialLinks].reverse();
 ---
 <footer class="footer">
-  <div class="container container-footer">
-    {/* Column set verified against tools/snapshots/home.html, not invented.
-        Seven boxes on the live footer: About Us, Services (CMS), Resources,
-        PHONE, ADDRESS, EMAIL, HOURS.
-
-        Photo Gallery is intentionally omitted from About Us: /photo-gallery
-        is draft:true in Webflow, so the live link is dead. Owner-approved
-        divergence (2026-08-11) — drop it rather than reproduce a broken
-        link. (The header's own "Virtual Office Tour" entry already points
-        at /photo-gallery with hidden:true, so it already renders nothing —
-        left alone.) */}
+  <div class="container-2 container-footer">
     <div class="footer-grid-desktop">
-      <div class="footer-box">
-        <div class="footer-heading">About Us</div>
-        <a class="footer-link" href="/meet-the-team">Meet the Team</a>
-        <a class="footer-link" href="/conferences">Conferences</a>
-        <button type="button" class="footer-link" data-modal-open="howd-we-do">How'd we do?</button>
+      <div class="footer-box-2">
+        <div class="footer-heading-2">About Us</div>
+        <div class="footer-links-wrapper">
+          <a href="/meet-the-team" class="footer-link-2">Meet the Team</a>
+          <a href="/conferences" class="footer-link-2">Conferences</a>
+          {/* Live element is `<a href="#" class="footer-link-2 rm-trigger">`, driven by
+              Webflow's own (unshipped) rm-trigger JS. Rendered as a real button wired to
+              our own data-modal-open mechanism instead — the same convention already used
+              for this exact "How'd we do?" action in Nav.astro and CallBar.astro — rather
+              than shipping a third, inconsistent `href="#"` pattern in this one spot. */}
+          <button type="button" class="footer-link-2 rm-trigger" data-modal-open="howd-we-do">How'd we do?</button>
+          {/* Photo Gallery intentionally omitted: /photo-gallery is draft:true in Webflow,
+              and the live link itself carries `.footer-link-2.hide` (display:none) — the
+              live site already hides it, matching this omission. */}
+        </div>
       </div>
-      <div class="footer-box">
-        <div class="footer-heading">Services</div>
-        {services.map((s) => (
-          <a class="footer-link" href={`/services/${s.data.slug}`}>{s.data.name}</a>
-        ))}
+
+      <div class="footer-box-2">
+        <div class="footer-heading-2">Services</div>
+        <div class="footer-links-wrapper">
+          {services.map((s) => (
+            <a href={`/services/${s.data.slug}`} class="footer-link-2"><div>{s.data.name}</div></a>
+          ))}
+        </div>
       </div>
-      <div class="footer-box">
-        <div class="footer-heading">Resources</div>
-        <a class="footer-link" href="/general-information-request">Contact Us</a>
-        <a class="footer-link" href="/appointment-request">Request an Appointment</a>
-        <a class="footer-link" href="/blog">Our Blog</a>
-        <div class="footer-social">
-          {socialLinks.map((s) => (
-            <a class="social-icon-link" href={s.href} target="_blank" rel="noopener" aria-label={s.label}>
-              <span class={`social-icon ci-font footer-social-icon ${s.icon}`} aria-hidden="true"></span>
+
+      <div class="footer-box-2">
+        <div class="footer-heading-2">Resources</div>
+        <div class="footer-links-wrapper">
+          <a href="/general-information-request" class="footer-link-2">Contact Us</a>
+          <a href="/appointment-request" class="footer-link-2">Request an Appointment</a>
+          <a href="/blog" class="footer-link-2">Our Blog</a>
+        </div>
+      </div>
+
+      <div class="footer-box-2">
+        <Image src={footerBadge} alt="" class="image-8" loading="lazy" />
+        <div class="footer-social-wrapper-2">
+          {footerSocialLinks.map((s) => (
+            <a href={s.href} target="_blank" rel="me nofollow noopener" class="social-icon-link-3" aria-label={s.label}>
+              <SocialIcon platform={s.icon} class="social-icon footer-social-icon" />
             </a>
           ))}
         </div>
       </div>
-      <div class="footer-box">
-        <div class="footer-heading">PHONE</div>
-        <a class="footer-link" href={site.phoneHref}>{site.phoneDisplay}</a>
-      </div>
-      <div class="footer-box">
-        <div class="footer-heading">ADDRESS</div>
-        <a class="footer-link" href={site.mapUrl} target="_blank" rel="noopener">{site.addressLine1}</a>
-        <a class="footer-link" href={site.mapUrl} target="_blank" rel="noopener">{site.addressLine2}</a>
-      </div>
-      <div class="footer-box">
-        <div class="footer-heading">EMAIL</div>
-        <a class="footer-link" href={`mailto:${site.email}`}>{site.email}</a>
-      </div>
-      <div class="footer-box" id="office-hours">
-        <div class="footer-heading">HOURS</div>
-        <div class="footer-link" set:html={hoursHtml} />
-      </div>
     </div>
 
     {/* Mobile block replicates the live accordion (tools/snapshots/home.html,
-        search "footer-grid-mobile") exactly, including what it omits: the
-        live mobile accordion has only About Us / Services / Resources
+        search "footer-grid-mobile") exactly: About Us / Services / Resources
         sections plus a trailing social-icon row. PHONE, ADDRESS, EMAIL, and
-        HOURS — present in the desktop grid above — are NOT in the live
-        mobile markup at all. That looks like a real gap on the live site
-        (mobile visitors can't see the phone/address/email/hours in the
-        footer), not something to fill in on our own judgement; flagged for
-        the project owner in the task report. Photo Gallery is omitted here
-        too — the live mobile link for it also carries a literal "hide"
-        class (`footer-link-2 hide`), so the live site hides it in both
-        grids, consistent with the desktop omission above. */}
+        HOURS were never part of this block either — the live mobile
+        accordion has no such content, desktop or mobile. Photo Gallery is
+        omitted here too, same reasoning as above. */}
     <div class="footer-grid-mobile">
       <div class="accordion-trigger footer-accordion">
         <button type="button" class="accordion-header-footer" aria-expanded="false" aria-controls="mobile-footer-about">
@@ -123,9 +135,13 @@ const year = new Date().getFullYear();
 
       <div class="footer-box-2">
         <div class="footer-social-wrapper-2">
-          {socialLinks.map((s) => (
-            <a class="social-icon-link-4" href={s.href} target="_blank" rel="noopener" aria-label={s.label}>
-              <span class={`social-icon ci-font footer-social-icon ${s.icon}`} aria-hidden="true"></span>
+          {/* Live mobile row is also Instagram-then-Facebook (`.social-icon-link-4`),
+              same as the desktop box above — reusing footerSocialLinks rather than
+              socialLinks here too. Icons were empty `.ci-font` placeholders here as
+              well; same real-SVG fix applied. */}
+          {footerSocialLinks.map((s) => (
+            <a class="social-icon-link-4" href={s.href} target="_blank" rel="me nofollow noopener" aria-label={s.label}>
+              <SocialIcon platform={s.icon} class="social-icon footer-social-icon" />
             </a>
           ))}
         </div>
@@ -133,7 +149,12 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="footer-bottom-2">
-      &copy; {year} {site.name}. All rights reserved.
+      <div class="footer_practice">
+        <div>&copy; The Veterinary Internal Medicine Group (VIMG)</div>
+      </div>
+      <div class="footer-signature-wrapper-2">
+        Made with love <span aria-hidden="true">🐾</span> <a href="http://veterinarymarketing.com/" target="_blank" rel="noopener" class="link-marketing-site-2">Veterinary Marketing</a>
+      </div>
     </div>
   </div>
 

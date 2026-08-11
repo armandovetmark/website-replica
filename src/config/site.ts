@@ -28,10 +28,6 @@ export const site = {
   gtmId: 'GTM-WJZMPJ92',
   placeId: 'ChIJhw8-GA3X3ogRu7g-W6oUCQU',
   reviewsApi: 'https://vetmarketing.googlewidget.com/api/reviews',
-  email: 'armstrongacvim@gmail.com',
-  mapUrl: 'https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA',
-  addressLine1: '12968 Southwest 132nd Avenue',
-  addressLine2: 'Miami, FL 33186',
   // Endpoint deferred by decision D6 — forms POST here once chosen.
   formAction: '',
   spanishBanner: 'Hablamos español!',
@@ -81,6 +77,28 @@ export const socialLinks = [
   { label: 'Facebook', href: 'https://www.facebook.com/theVIMG/', icon: 'facebook' },
   { label: 'Instagram', href: 'https://www.instagram.com/thevimg/', icon: 'instagram' },
 ];
+
+// The live site's Services collection order (Webflow's own collection order,
+// confirmed against tools/snapshots/home.html's footer service list — the
+// exported CMS JSON doesn't preserve it). The header nav dropdown and the
+// footer's Services column both sort by this instead of alphabetically.
+export const serviceOrder: string[] = [
+  'specialty-vet-care-education',
+  'ultrasound-fine-needle-aspirates',
+  'ultrasound',
+  'thoracic-ultrasounds-non-cardiac',
+  'pregnancy-checks',
+  'internal-medicine-consults',
+  'miscellaneous-diagnostic-procedures-abdominocentesis-thoracocentesis-pericardiocentesis',
+  'advanced-imaging-options-ct-and-fluoroscopy-via-collaboration-with-mpi',
+];
+
+/** Sorts CMS collection entries (or anything slug-shaped) by serviceOrder. */
+export function sortByServiceOrder<T extends { data: { slug: string } }>(items: T[]): T[] {
+  return [...items].sort(
+    (a, b) => serviceOrder.indexOf(a.data.slug) - serviceOrder.indexOf(b.data.slug),
+  );
+}
 
 export const locations = [
   { label: 'Kendall Location', href: 'https://maps.app.goo.gl/MwK748Xikxh9QStp8' },

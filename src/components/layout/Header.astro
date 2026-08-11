@@ -1,12 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
-import { navItems, site, socialLinks, locations, hoursHtml } from '../../config/site';
+import { navItems, site, socialLinks, locations, hoursHtml, sortByServiceOrder } from '../../config/site';
 import Nav from './Nav.astro';
+import SocialIcon from '../icons/SocialIcon.astro';
 import logoWhite from '~/assets/vimg-logowhite3.png';
 import logoColor from '~/assets/vimg-logo5.png';
 import { Image } from 'astro:assets';
 
-const services = await getCollection('services');
+// Sorted by the live site's actual Webflow collection order (not
+// alphabetical) — see serviceOrder in config/site.ts.
+const services = sortByServiceOrder(await getCollection('services'));
 const items = navItems.map((item) =>
   item.label === 'Services'
     ? {
@@ -68,17 +71,7 @@ const items = navItems.map((item) =>
               <div class="navbar-social-media-icons">
                 {socialLinks.map((s) => (
                   <a class="social-icon-link" href={s.href} target="_blank" rel="noopener" aria-label={s.label}>
-                    {s.icon === 'facebook' ? (
-                      <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.55-1.5H17V3.7C16.6 3.65 15.5 3.5 14.2 3.5c-2.7 0-4.5 1.65-4.5 4.65V10H7v3.1h2.7V21h3.8z" />
-                      </svg>
-                    ) : (
-                      <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="currentColor" stroke-width="2" />
-                        <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2" />
-                        <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" />
-                      </svg>
-                    )}
+                    <SocialIcon platform={s.icon} class="social-icon" />
                   </a>
                 ))}
               </div>

@@ -14,20 +14,24 @@ describe('Footer', () => {
     expect(doc.querySelector('footer.footer')).not.toBeNull();
   });
 
+  it('uses the real .container-2.container-footer wrapper, not .container', () => {
+    // Corrected 2026-08-11: the live wrapper is .container-2.container-footer.
+    // .container (this project's own shared base-layout class) was never the
+    // real wrapper here.
+    expect(doc.querySelector('footer .container-2.container-footer')).not.toBeNull();
+  });
+
   it('contains the callbar', () => {
     expect(doc.querySelector('footer.footer .callbar')).not.toBeNull();
   });
 
   it('renders the practice phone and both social links', () => {
+    // The phone link here comes from the CallBar (still rendered inside
+    // <footer>), not a footer-owned PHONE box — that box never existed on
+    // the real footer (see the desktop-grid describe block below).
     expect(doc.querySelector('footer a[href="tel:+17866735903"]')).not.toBeNull();
     expect(doc.querySelector('footer a[href*="facebook.com/theVIMG"]')).not.toBeNull();
     expect(doc.querySelector('footer a[href*="instagram.com/thevimg"]')).not.toBeNull();
-  });
-
-  it('shows the live display number but still dials the confirmed tel: number (intentional mismatch)', () => {
-    const phoneLink = doc.querySelector('footer a[href="tel:+17866735903"]');
-    expect(phoneLink).not.toBeNull();
-    expect(phoneLink!.textContent).toContain('(305) 677-2015');
   });
 
   it('renders the reviews container and write-review link', () => {
@@ -58,6 +62,16 @@ describe('Footer', () => {
     expect(doc.querySelector('.old-footer-new-template')).toBeNull();
   });
 
+  it('renders the footer-bottom copyright and signature line', () => {
+    const bottom = doc.querySelector('.footer-bottom-2');
+    expect(bottom).not.toBeNull();
+    expect(bottom!.textContent).toContain('The Veterinary Internal Medicine Group (VIMG)');
+    expect(bottom!.textContent).toContain('Made with love');
+    const marketingLink = bottom!.querySelector('a[href="http://veterinarymarketing.com/"]');
+    expect(marketingLink).not.toBeNull();
+    expect(marketingLink!.getAttribute('rel')).toContain('noopener');
+  });
+
   describe('desktop grid (.footer-grid-desktop, ≥768px)', () => {
     const grid = () => doc.querySelector('.footer-grid-desktop')!;
 
@@ -67,26 +81,67 @@ describe('Footer', () => {
       expect(grid()).not.toBe(doc.querySelector('.footer-grid-mobile'));
     });
 
-    it('renders all 8 CMS-driven service links', () => {
-      const links = [...grid().querySelectorAll('a[href^="/services/"]')];
-      expect(links).toHaveLength(8);
+    it('renders exactly 4 .footer-box-2 boxes (the 5-column grid has one intentionally empty trailing column)', () => {
+      // Corrected 2026-08-11: an earlier pass rendered 7 boxes here (About
+      // Us, Services, Resources, PHONE, ADDRESS, EMAIL, HOURS), mis-extracted
+      // from .old-footer-new-template, a hidden dead block. The real
+      // .footer-grid-desktop has exactly 4 .footer-box-2 children.
+      expect(grid().querySelectorAll(':scope > .footer-box-2')).toHaveLength(4);
     });
 
-    it('renders the ADDRESS, EMAIL, and HOURS boxes', () => {
-      const addressLinks = grid().querySelectorAll('a[href="https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA"]');
-      expect(addressLinks.length).toBe(2);
-      expect(grid().textContent).toContain('12968 Southwest 132nd Avenue');
-      expect(grid().textContent).toContain('Miami, FL 33186');
+    it('renders sentence-case box headings, not uppercase — the fourth box has none', () => {
+      const headings = [...grid().querySelectorAll('.footer-heading-2')].map((h) => h.textContent);
+      expect(headings).toEqual(['About Us', 'Services', 'Resources']);
+    });
 
-      expect(grid().querySelector('a[href="mailto:armstrongacvim@gmail.com"]')).not.toBeNull();
+    it('renders all 8 CMS-driven service links in the live collection order, not alphabetical', () => {
+      const links = [...grid().querySelectorAll('a[href^="/services/"]')];
+      expect(links).toHaveLength(8);
+      expect(links.map((a) => a.getAttribute('href'))).toEqual([
+        '/services/specialty-vet-care-education',
+        '/services/ultrasound-fine-needle-aspirates',
+        '/services/ultrasound',
+        '/services/thoracic-ultrasounds-non-cardiac',
+        '/services/pregnancy-checks',
+        '/services/internal-medicine-consults',
+        '/services/miscellaneous-diagnostic-procedures-abdominocentesis-thoracocentesis-pericardiocentesis',
+        '/services/advanced-imaging-options-ct-and-fluoroscopy-via-collaboration-with-mpi',
+      ]);
+    });
 
-      const hoursBox = grid().querySelector('#office-hours');
-      expect(hoursBox).not.toBeNull();
-      expect(hoursBox!.textContent).toContain('Monday - Friday');
+    it("renders the About Us and Resources links, and How'd we do? as a real button", () => {
+      expect(grid().querySelector('a[href="/meet-the-team"]')).not.toBeNull();
+      expect(grid().querySelector('a[href="/conferences"]')).not.toBeNull();
+      const howd = grid().querySelector('[data-modal-open="howd-we-do"]');
+      expect(howd).not.toBeNull();
+      expect(howd!.tagName.toLowerCase()).toBe('button');
+      expect(grid().querySelector('a[href="/general-information-request"]')).not.toBeNull();
+      expect(grid().querySelector('a[href="/appointment-request"]')).not.toBeNull();
+      expect(grid().querySelector('a[href="/blog"]')).not.toBeNull();
+    });
+
+    it('omits the PHONE, ADDRESS, EMAIL, and HOURS boxes entirely — they only ever existed in the dead legacy block', () => {
+      expect(grid().querySelector('#office-hours')).toBeNull();
+      expect(grid().querySelector('a[href^="mailto:"]')).toBeNull();
+      expect(grid().querySelector('a[href="https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA"]')).toBeNull();
+      expect(grid().textContent).not.toContain('(305) 677-2015');
     });
 
     it('omits the draft Photo Gallery link (page is draft:true on the live site)', () => {
       expect(grid().textContent).not.toContain('Photo Gallery');
+    });
+
+    it('renders the ACVIM badge image and a real (non-empty) SVG for each social icon, Instagram before Facebook', () => {
+      expect(grid().querySelector('img.image-8')).not.toBeNull();
+      const links = [...grid().querySelectorAll('.social-icon-link-3')];
+      expect(links).toHaveLength(2);
+      expect(links.map((a) => a.getAttribute('href'))).toEqual([
+        'https://www.instagram.com/thevimg/',
+        'https://www.facebook.com/theVIMG/',
+      ]);
+      for (const link of links) {
+        expect(link.querySelector('svg')).not.toBeNull();
+      }
     });
   });
 
@@ -117,13 +172,22 @@ describe('Footer', () => {
       expect(headings).toEqual(['About Us', 'Services', 'Resources']);
     });
 
-    it('renders all 8 CMS-driven service links, not the single generic /services link from an earlier pass', () => {
+    it('renders all 8 CMS-driven service links in the live collection order, not alphabetical', () => {
       const links = [...grid().querySelectorAll('a[href^="/services/"]')];
-      expect(links).toHaveLength(8);
+      expect(links.map((a) => a.getAttribute('href'))).toEqual([
+        '/services/specialty-vet-care-education',
+        '/services/ultrasound-fine-needle-aspirates',
+        '/services/ultrasound',
+        '/services/thoracic-ultrasounds-non-cardiac',
+        '/services/pregnancy-checks',
+        '/services/internal-medicine-consults',
+        '/services/miscellaneous-diagnostic-procedures-abdominocentesis-thoracocentesis-pericardiocentesis',
+        '/services/advanced-imaging-options-ct-and-fluoroscopy-via-collaboration-with-mpi',
+      ]);
       expect(grid().querySelector('a[href="/services"]')).toBeNull();
     });
 
-    it('renders Conferences, How’d we do?, Request an Appointment, and Our Blog — present on the live site but missing from an earlier pass', () => {
+    it("renders Conferences, How'd we do?, Request an Appointment, and Our Blog — present on the live site but missing from an earlier pass", () => {
       expect(grid().querySelector('a[href="/conferences"]')).not.toBeNull();
       expect(grid().querySelector('[data-modal-open="howd-we-do"]')).not.toBeNull();
       expect(grid().querySelector('a[href="/appointment-request"]')).not.toBeNull();
@@ -133,24 +197,26 @@ describe('Footer', () => {
     it('does NOT contain PHONE/ADDRESS/EMAIL/HOURS — verified absent from the live mobile accordion too', () => {
       // Not an oversight: tools/snapshots/home.html's real .footer-grid-mobile
       // block has no PHONE/ADDRESS/EMAIL/HOURS content at all — only About
-      // Us / Services / Resources sections plus a trailing social row. The
-      // desktop-only PHONE/ADDRESS/EMAIL/HOURS boxes are asserted above,
-      // scoped to .footer-grid-desktop; this asserts the live site's mobile
-      // footer genuinely omits them, so a future pass doesn't "fix" this by
-      // inventing content the live site doesn't have either.
+      // Us / Services / Resources sections plus a trailing social row.
       expect(grid().querySelector('#office-hours')).toBeNull();
-      expect(grid().querySelector('a[href="mailto:armstrongacvim@gmail.com"]')).toBeNull();
+      expect(grid().querySelector('a[href^="mailto:"]')).toBeNull();
       expect(grid().querySelector('a[href="https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA"]')).toBeNull();
       expect(grid().textContent).not.toContain('(305) 677-2015');
     });
 
-    it('renders the trailing social row with both platforms', () => {
+    it('renders the trailing social row with real SVG icons, Instagram before Facebook', () => {
+      // Corrected 2026-08-11: the live mobile row (.social-icon-link-4) is
+      // also Instagram-then-Facebook, same as the desktop box — not
+      // Facebook-first. Icons were empty .ci-font placeholders; now real SVGs.
       const links = [...grid().querySelectorAll('.social-icon-link-4')];
       expect(links).toHaveLength(2);
       expect(links.map((a) => a.getAttribute('href'))).toEqual([
-        'https://www.facebook.com/theVIMG/',
         'https://www.instagram.com/thevimg/',
+        'https://www.facebook.com/theVIMG/',
       ]);
+      for (const link of links) {
+        expect(link.querySelector('svg')).not.toBeNull();
+      }
     });
 
     it('omits the draft Photo Gallery link (hidden on the live site in both grids)', () => {

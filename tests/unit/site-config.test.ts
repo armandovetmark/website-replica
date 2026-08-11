@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { site, navItems, callbarItems, socialLinks } from '../../src/config/site';
+import { site, navItems, callbarItems, socialLinks, serviceOrder, sortByServiceOrder } from '../../src/config/site';
 
 describe('site config', () => {
   it('exposes the practice phone number', () => {
@@ -9,13 +9,6 @@ describe('site config', () => {
     // intentional by the project owner, not a bug. Pinned here (separately
     // from phoneHref above) so a future "fix" doesn't quietly reconcile them.
     expect(site.phoneDisplay).toBe('(305) 677-2015');
-  });
-
-  it('exposes the footer contact details', () => {
-    expect(site.email).toBe('armstrongacvim@gmail.com');
-    expect(site.mapUrl).toBe('https://maps.app.goo.gl/Kxfh8pL4dFhW4prdA');
-    expect(site.addressLine1).toBe('12968 Southwest 132nd Avenue');
-    expect(site.addressLine2).toBe('Miami, FL 33186');
   });
 
   it('exposes GTM and GMB identifiers', () => {
@@ -44,5 +37,27 @@ describe('site config', () => {
 
   it('defines both social links', () => {
     expect(socialLinks.map((s) => s.label)).toEqual(['Facebook', 'Instagram']);
+  });
+
+  it('defines the live Webflow collection order for all 8 services', () => {
+    expect(serviceOrder).toHaveLength(8);
+    expect(serviceOrder[0]).toBe('specialty-vet-care-education');
+    expect(serviceOrder[serviceOrder.length - 1]).toBe(
+      'advanced-imaging-options-ct-and-fluoroscopy-via-collaboration-with-mpi',
+    );
+  });
+
+  it('sortByServiceOrder orders entries by serviceOrder, not alphabetically', () => {
+    const items = [
+      { data: { slug: 'ultrasound' } },
+      { data: { slug: 'specialty-vet-care-education' } },
+      { data: { slug: 'pregnancy-checks' } },
+    ];
+    const sorted = sortByServiceOrder(items);
+    expect(sorted.map((i) => i.data.slug)).toEqual([
+      'specialty-vet-care-education',
+      'ultrasound',
+      'pregnancy-checks',
+    ]);
   });
 });

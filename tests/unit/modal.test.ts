@@ -6,13 +6,18 @@ beforeEach(() => {
   document.body.innerHTML = `
     <button data-modal-open="demo">open</button>
     <div class="modal-wrapper" data-modal="demo" hidden>
-      <div class="modal"><button data-modal-close>close</button></div>
+      <div class="modal">
+        <button data-modal-close>close</button>
+        <a href="#action">action</a>
+      </div>
     </div>`;
   document.body.classList.remove('has-modal-open');
   initModals(document);
 });
 
 const wrapper = () => document.querySelector('[data-modal="demo"]') as HTMLElement;
+const closeBtn = () => document.querySelector('[data-modal-close]') as HTMLElement;
+const actionLink = () => document.querySelector('a[href="#action"]') as HTMLElement;
 
 describe('initModals', () => {
   it('opens the modal on trigger click', () => {
@@ -54,7 +59,44 @@ describe('initModals', () => {
 
   it('moves focus into the modal on open', () => {
     (document.querySelector('[data-modal-open]') as HTMLElement).click();
-    expect(document.activeElement).toBe(document.querySelector('[data-modal-close]'));
+    expect(document.activeElement).toBe(closeBtn());
+  });
+
+  it('restores focus to whatever had it before the modal opened', () => {
+    const trigger = document.querySelector('[data-modal-open]') as HTMLElement;
+    trigger.focus();
+    trigger.click();
+    closeBtn().click();
+    expect(document.activeElement).toBe(trigger);
+  });
+
+  it('traps Tab: pressing Tab on the last focusable wraps to the first', () => {
+    (document.querySelector('[data-modal-open]') as HTMLElement).click();
+    actionLink().focus();
+    const event = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+    document.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(closeBtn());
+  });
+
+  it('traps Tab: pressing Shift+Tab on the first focusable wraps to the last', () => {
+    (document.querySelector('[data-modal-open]') as HTMLElement).click();
+    closeBtn().focus();
+    const event = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      shiftKey: true,
+      bubbles: true,
+      cancelable: true,
+    });
+    document.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(actionLink());
+  });
+
+  it('does not trap Tab when no modal is open', () => {
+    const event = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+    document.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
   });
 
   it('does not double-bind the trigger listener', () => {

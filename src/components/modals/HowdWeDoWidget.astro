@@ -33,12 +33,6 @@ const reviewUrl = `https://search.google.com/local/writereview?placeid=${site.pl
 </Modal>
 
 <script>
-  const root = document.querySelector('[data-modal="howd-we-do"]');
-  root?.addEventListener('click', (event) => {
-    const choice = (event.target as HTMLElement).closest<HTMLElement>('[data-rm-choice]');
-    if (!choice) return;
-    for (const step of root.querySelectorAll<HTMLElement>('.rm-step')) {
-      step.hidden = step.dataset.rmStep !== choice.dataset.rmChoice;
-    }
-  });
+  import { initHowdWeDo } from '../../scripts/howd-we-do';
+  initHowdWeDo();
 </script>

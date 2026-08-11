@@ -2182,6 +2182,17 @@ Expected: FAIL — cannot resolve `../../src/scripts/modal`.
 ```ts
 const OPEN_CLASS = 'is-open';
 const BODY_CLASS = 'has-modal-open';
+const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+/** Focusable descendants, skipping anything inside a hidden step. */
+function focusables(root: HTMLElement): HTMLElement[] {
+  return [...root.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+    (el) => !el.closest('[hidden]'),
+  );
+}
+
+/** The element that had focus before the modal opened, restored on close. */
+let lastFocused: HTMLElement | null = null;
 
 function close(wrapper: HTMLElement, doc: Document): void {
   wrapper.classList.remove(OPEN_CLASS);
@@ -2189,15 +2200,20 @@ function close(wrapper: HTMLElement, doc: Document): void {
   if (!doc.querySelector(`.${OPEN_CLASS}[data-modal]`)) {
     doc.body.classList.remove(BODY_CLASS);
   }
+  // Returning focus to the trigger is part of the contract role="dialog" claims.
+  lastFocused?.focus();
+  lastFocused = null;
 }
 
 function open(wrapper: HTMLElement, doc: Document): void {
+  lastFocused = doc.activeElement as HTMLElement | null;
   wrapper.removeAttribute('hidden');
   wrapper.classList.add(OPEN_CLASS);
   doc.body.classList.add(BODY_CLASS);
-  wrapper.querySelector<HTMLElement>(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-  )?.focus();
+  // Lets a widget reset its own internal state without the controller
+  // knowing anything about that widget.
+  wrapper.dispatchEvent(new CustomEvent('modal:open'));
+  focusables(wrapper)[0]?.focus();
 }
 
 /** Wires [data-modal-open="id"] triggers to [data-modal="id"] wrappers. */
@@ -2228,9 +2244,31 @@ export function initModals(doc: Document = document): void {
   if (!doc.documentElement.dataset.modalEscBound) {
     doc.documentElement.dataset.modalEscBound = 'true';
     doc.addEventListener('keydown', (event) => {
-      if ((event as KeyboardEvent).key !== 'Escape') return;
-      for (const w of doc.querySelectorAll<HTMLElement>(`.${OPEN_CLASS}[data-modal]`)) {
-        close(w, doc);
+      const e = event as KeyboardEvent;
+      const openWrapper = doc.querySelector<HTMLElement>(`.${OPEN_CLASS}[data-modal]`);
+      if (!openWrapper) return;
+
+      if (e.key === 'Escape') {
+        for (const w of doc.querySelectorAll<HTMLElement>(`.${OPEN_CLASS}[data-modal]`)) {
+          close(w, doc);
+        }
+        return;
+      }
+
+      // Trap Tab inside the dialog. Without this, aria-modal="true" claims a
+      // modality we do not deliver: Shift+Tab from the close button reaches
+      // background controls hidden behind the overlay but still interactive.
+      if (e.key !== 'Tab') return;
+      const items = focusables(openWrapper);
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && doc.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && doc.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
     });
   }
@@ -2367,13 +2405,24 @@ const reviewUrl = `https://search.google.com/local/writereview?placeid=${site.pl
 
 <script>
   const root = document.querySelector('[data-modal="howd-we-do"]');
+
+  const showStep = (name: string) => {
+    for (const step of root!.querySelectorAll<HTMLElement>('.rm-step')) {
+      step.hidden = step.dataset.rmStep !== name;
+    }
+  };
+
   root?.addEventListener('click', (event) => {
     const choice = (event.target as HTMLElement).closest<HTMLElement>('[data-rm-choice]');
     if (!choice) return;
-    for (const step of root.querySelectorAll<HTMLElement>('.rm-step')) {
-      step.hidden = step.dataset.rmStep !== choice.dataset.rmChoice;
-    }
+    showStep(choice.dataset.rmChoice!);
   });
+
+  // Reset to the prompt every time the modal opens. Two triggers share this
+  // modal, and without a reset it reopens mid-flow — and because the
+  // aria-labelledby target lives inside step 1, the dialog would also reopen
+  // with no accessible name.
+  root?.addEventListener('modal:open', () => showStep('1'));
 </script>
 ```
 

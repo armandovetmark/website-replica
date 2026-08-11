@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { initNav } from '../../src/scripts/nav';
 
 beforeEach(() => {
@@ -61,5 +61,34 @@ describe('initNav', () => {
     toggles[1].click();
     expect(lists[0].classList.contains('is-open')).toBe(false);
     expect(lists[1].classList.contains('is-open')).toBe(true);
+  });
+
+  it('does not double-bind the menu button listener', () => {
+    // Without the guard, a second call would attach a second handler,
+    // causing two toggles: open then closed, appearing to do nothing.
+    initNav(document);
+    menuButton().click();
+    expect(navMenu().classList.contains('is-open')).toBe(true);
+  });
+
+  it('does not double-bind the dropdown toggle listener', () => {
+    // Without the guard, a second call would attach a second handler,
+    // causing two toggles: open then closed, appearing to do nothing.
+    initNav(document);
+    toggle().click();
+    expect(list().classList.contains('is-open')).toBe(true);
+  });
+
+  it('binds the Escape listener only once', () => {
+    // Reset the flag so we can measure from a fresh state within this test.
+    delete document.documentElement.dataset.navEscBound;
+    const addEventListenerSpy = vi.spyOn(document, 'addEventListener');
+    initNav(document);
+    initNav(document);
+    const keydownCalls = addEventListenerSpy.mock.calls.filter(
+      ([eventName]) => eventName === 'keydown'
+    );
+    expect(keydownCalls).toHaveLength(1);
+    addEventListenerSpy.mockRestore();
   });
 });

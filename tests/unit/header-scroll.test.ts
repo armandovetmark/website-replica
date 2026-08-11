@@ -2,13 +2,18 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { initHeaderScroll } from '../../src/scripts/header-scroll';
 
 let callback: (entries: { isIntersecting: boolean }[]) => void;
+let observerCount = 0;
 
 beforeEach(() => {
+  observerCount = 0;
   document.body.innerHTML = `
     <div class="header"><div class="navbar"></div></div>
     <main><div data-scroll-sentinel></div></main>`;
   vi.stubGlobal('IntersectionObserver', class {
-    constructor(cb: typeof callback) { callback = cb; }
+    constructor(cb: typeof callback) {
+      observerCount++;
+      callback = cb;
+    }
     observe() {} disconnect() {}
   });
 });
@@ -30,5 +35,13 @@ describe('initHeaderScroll', () => {
   it('does nothing when there is no sentinel', () => {
     document.body.innerHTML = '<div class="header"></div>';
     expect(() => initHeaderScroll(document)).not.toThrow();
+  });
+
+  it('observes only once when called repeatedly', () => {
+    // A second observer on the same sentinel would never be disconnected.
+    initHeaderScroll(document);
+    initHeaderScroll(document);
+    initHeaderScroll(document);
+    expect(observerCount).toBe(1);
   });
 });

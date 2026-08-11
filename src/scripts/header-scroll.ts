@@ -4,8 +4,13 @@
  */
 export function initHeaderScroll(doc: Document = document): void {
   const header = doc.querySelector('.header');
-  const sentinel = doc.querySelector('[data-scroll-sentinel]');
+  const sentinel = doc.querySelector<HTMLElement>('[data-scroll-sentinel]');
   if (!header || !sentinel) return;
+
+  // Idempotence: a second call would attach a second, never-disconnected
+  // observer to the same sentinel.
+  if (sentinel.dataset.scrollObserved) return;
+  sentinel.dataset.scrollObserved = 'true';
 
   const observer = new IntersectionObserver(
     (entries) => {

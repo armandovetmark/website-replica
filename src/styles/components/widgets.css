@@ -1,0 +1,58 @@
+/* Authoritative values dumped from tools/snapshots/home.css via extract-css.mjs
+   for: google-reviews-widget-wrapper-2, google-reviews-widget-1, grw-google.
+   extractRules() emits media rules before base rules (reverse of cascade
+   order) — reordered here as base first, then max-width media narrowest-last.
+
+   NOTE on visibility: on the live site .google-reviews-widget-wrapper-2 is
+   display:none by default and only becomes display:block at max-width:767px,
+   while its child .google-reviews-widget-1 is the exact opposite — display:flex
+   by default and display:none at max-width:767px. Combined, the badge is not
+   actually visible at ANY viewport width on the live site (the parent hides it
+   above 767px; the child hides it at/below 767px) — this reads as dead/orphaned
+   CSS, the same kind of leftover the brief told us to skip for
+   .old-footer-new-template. Reproducing "never visible" would defeat the point
+   of building the widget, so this keeps it always visible and reuses the real
+   background/shadow/radius/padding/color values instead of the real display
+   toggles. */
+
+.google-reviews-widget-wrapper-2 {
+  position: fixed;
+  z-index: 100;
+  bottom: 1em;
+  left: 1em;
+  right: auto;
+}
+
+.google-reviews-widget-1 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  width: 300px;
+  padding: 10px 30px;
+  background-color: #fff;
+  color: var(--text);
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: 30px;
+  box-shadow: 0 0 20px 6px #0000001f;
+}
+
+.grw-google {
+  max-width: 28px;
+}
+
+@media screen and (max-width: 991px) {
+  /* Live value here (bottom:100px) was tuned against that page's own
+     CallBar; we use the token instead so this always clears our fixed
+     CallBar. Verified in-browser that CallBar's *rendered* height (content
+     + padding) runs ~6px taller than the --callbar-height token itself, so
+     bare var(--callbar-height) still let the badge's bottom edge clip the
+     callbar's top edge — the brief's extra "+ 1rem" buffer absorbs that. */
+  .google-reviews-widget-wrapper-2 { bottom: calc(var(--callbar-height) + 1rem); }
+}
+
+@media screen and (max-width: 767px) {
+  .google-reviews-widget-1 { width: 240px; font-size: 12px; padding: 8px 16px; }
+  .grw-google { max-width: 20px; }
+}

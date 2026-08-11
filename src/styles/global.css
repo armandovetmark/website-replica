@@ -5,4 +5,6 @@
 @import './layout/callbar.css';
 @import './layout/header.css';
 @import './layout/nav.css';
+@import './layout/footer.css';
 @import './components/modal.css';
+@import './components/widgets.css';

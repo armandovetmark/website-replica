@@ -1,0 +1,30 @@
+---
+import { site } from '../../config/site';
+import googleIcon from '~/assets/5c196d97e585170c8abc6aa4_google icon.png';
+import { Image } from 'astro:assets';
+
+const reviewUrl = `https://search.google.com/local/writereview?placeid=${site.placeId}`;
+---
+<div class="google-reviews-widget-wrapper-2">
+  <a href={reviewUrl} target="_blank" rel="noopener" class="google-reviews-widget-1" aria-label="Leave us a Google review">
+    <Image src={googleIcon} alt="" class="grw-google" width="24" height="24" loading="lazy" />
+    <div id="reviews-container"></div>
+  </a>
+</div>
+
+<script define:vars={{ endpoint: `${site.reviewsApi}/${site.placeId}` }}>
+  fetch(endpoint)
+    .then((r) => (r.ok ? r.text() : Promise.reject(new Error(String(r.status)))))
+    .then((html) => {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      doc.querySelectorAll('script, iframe, object, embed').forEach((n) => n.remove());
+      doc.querySelectorAll('*').forEach((el) => {
+        for (const attr of [...el.attributes]) {
+          if (/^on/i.test(attr.name) || /javascript:/i.test(attr.value)) el.removeAttribute(attr.name);
+        }
+      });
+      const target = document.getElementById('reviews-container');
+      if (target) target.replaceChildren(...doc.body.childNodes);
+    })
+    .catch(() => { /* widget is non-essential; fail silently as the source does */ });
+</script>

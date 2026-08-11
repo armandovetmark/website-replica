@@ -1,0 +1,78 @@
+/* Authoritative values dumped from tools/snapshots/home.css via extract-css.mjs
+   for: footer, footer-grid-desktop, footer-grid-mobile, footer-bottom-2.
+   extractRules() emits media rules before base rules (reverse of cascade
+   order) — reordered here as base first, then max-width media blocks
+   narrowest-last, matching the source site's own declaration order. */
+
+.footer {
+  background-color: var(--main-dark);
+  color: var(--white);
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+
+.container-footer {
+  padding-block: 3rem;
+}
+
+.footer-grid-desktop {
+  display: grid;
+  /* Live site uses a 5-column CMS-driven grid; our config-driven footer has
+     4 static groups (Contact/Hours/Explore/Follow), so the column count is
+     ours, not lifted from home.css. Gap matches the live 2em value. */
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.footer-grid-mobile {
+  display: none;
+}
+
+/* footer-heading / footer-link are NOT taken from home.css: those exact
+   class names exist there, but only inside .old-footer-new-template (a dead
+   block we deliberately don't reproduce) styled for a LIGHT background
+   (color: var(--text)). Reusing those values verbatim would render
+   dark-gray text on our dark .footer. These are fresh values for a dark
+   background instead. */
+.footer-heading {
+  font-size: 1rem;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  color: var(--white);
+}
+.footer-link {
+  display: block;
+  color: var(--white-o85);
+  font-size: .875rem;
+  padding-block: .25rem;
+}
+.footer-link:hover {
+  color: var(--cta);
+}
+
+.footer-bottom-2 {
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 3em;
+  font-size: .875em;
+}
+
+@media screen and (max-width: 991px) {
+  /* Live site's own value here is padding-bottom:7em, tuned for its own
+     footer content. We use the callbar-height token instead: CallBar is
+     position:fixed at this breakpoint and must never cover our footer's
+     last row, regardless of what the token's value is set to elsewhere. */
+  .footer { padding-bottom: var(--callbar-height); }
+}
+
+@media screen and (max-width: 767px) {
+  .footer-grid-desktop { display: none; }
+  /* Live site switches to display:block here (accordion-driven mobile
+     footer); our mobile grid is a flat link list, so block is equivalent
+     and matches the real toggle more closely than forcing a 1-col grid. */
+  .footer-grid-mobile { display: block; }
+}
+
+@media screen and (max-width: 479px) {
+  .footer { padding-top: 4em; }
+}

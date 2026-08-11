@@ -1,0 +1,59 @@
+---
+import { site, socialLinks, locations, hoursHtml } from '../../config/site';
+import CallBar from './CallBar.astro';
+import GoogleReviews from '../widgets/GoogleReviews.astro';
+import VetstoriaButton from '../widgets/VetstoriaButton.astro';
+import UserWay from '../widgets/UserWay.astro';
+
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container container-footer">
+    <div class="footer-grid-desktop">
+      <div>
+        <h2 class="footer-heading">Contact</h2>
+        <a class="footer-link" href={site.phoneHref}>{site.phoneDisplay}</a>
+        {locations.map((l) => (
+          <a class="footer-link" href={l.href} target="_blank" rel="noopener">{l.label}</a>
+        ))}
+      </div>
+      <div>
+        <h2 class="footer-heading">Hours</h2>
+        <div class="footer-link" set:html={hoursHtml} />
+      </div>
+      <div>
+        <h2 class="footer-heading">Explore</h2>
+        <a class="footer-link" href="/services">Services</a>
+        <a class="footer-link" href="/meet-the-team">Meet Our Team</a>
+        <a class="footer-link" href="/clinic-schedule-locations">Pop-Up Clinics</a>
+        <a class="footer-link" href="/blog">Our Blog</a>
+        <a class="footer-link" href="/career-opportunity">Careers</a>
+      </div>
+      <div>
+        <h2 class="footer-heading">Follow</h2>
+        {socialLinks.map((s) => (
+          <a class="footer-link" href={s.href} target="_blank" rel="noopener">{s.label}</a>
+        ))}
+      </div>
+    </div>
+
+    <div class="footer-grid-mobile">
+      <a class="footer-link" href={site.phoneHref}>{site.phoneDisplay}</a>
+      <a class="footer-link" href="/services">Services</a>
+      <a class="footer-link" href="/meet-the-team">Meet Our Team</a>
+      <a class="footer-link" href="/general-information-request">Contact</a>
+      {socialLinks.map((s) => (
+        <a class="footer-link" href={s.href} target="_blank" rel="noopener">{s.label}</a>
+      ))}
+    </div>
+
+    <div class="footer-bottom-2">
+      &copy; {year} {site.name}. All rights reserved.
+    </div>
+  </div>
+
+  <CallBar />
+  <GoogleReviews />
+  <VetstoriaButton />
+  <UserWay />
+</footer>

@@ -18,10 +18,16 @@ import untitled2 from '~/assets/Untitled-2.jpg';
 //   2nd/3rd: grid-area: span 1 / span 2 / span 1 / span 2
 //   <=991px: 1st and 2nd (not 3rd) switch to grid-column: span 2 / span 2
 // Reproduced here as three real classes instead of #w-node ids.
+// Task 16 fix: the live anchors have empty alt + no text + no aria-label,
+// so they have NO accessible name at all (a real gap on the live site
+// too — confirmed the live markup also ships alt=""). Unlike the missing
+// <h1> (Task 13, deliberately replicated), this one has an explicit
+// instruction to fix rather than replicate: give each anchor a real,
+// distinguishing aria-label instead of silently porting the gap.
 const photos = [
-  { image: fd4a9937, class: 'office-gallery-lightbox grid-span-lead' },
-  { image: untitled1, class: 'office-gallery-lightbox side-images grid-span-top' },
-  { image: untitled2, class: 'office-gallery-lightbox side-images grid-span-bottom' },
+  { image: fd4a9937, class: 'office-gallery-lightbox grid-span-lead', label: 'View larger office photo (1 of 3)' },
+  { image: untitled1, class: 'office-gallery-lightbox side-images grid-span-top', label: 'View larger office photo (2 of 3)' },
+  { image: untitled2, class: 'office-gallery-lightbox side-images grid-span-bottom', label: 'View larger office photo (3 of 3)' },
 ];
 ---
 <div class="general-section no-margin gray-bg">
@@ -29,7 +35,7 @@ const photos = [
     <div class="mt-2">
       <div class="gallery-grid">
         {photos.map((photo) => (
-          <a href={photo.image.src} data-lightbox class={photo.class}>
+          <a href={photo.image.src} data-lightbox class={photo.class} aria-label={photo.label}>
             <Image src={photo.image} alt="" class="office-gallery-thumbnail gallery" loading="lazy" />
           </a>
         ))}

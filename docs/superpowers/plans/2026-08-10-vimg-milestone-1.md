@@ -2966,8 +2966,13 @@ describe('homepage hero', () => {
     expect(doc.querySelector('.hero')).not.toBeNull();
   });
 
-  it('has exactly one h1', () => {
-    expect(doc.querySelectorAll('h1')).toHaveLength(1);
+  it('reproduces the live heading structure', () => {
+    // The live hero has NO <h1>: its only heading is an <h6> inside .hero-content
+    // ("internal medicine consults & ultrasounds"), with "WELCOME TO" sitting in
+    // .hero-tagline-home. Replicate as published; the missing h1 is a real SEO
+    // gap on the live site, recorded for the owner rather than silently "fixed".
+    expect(doc.querySelectorAll('.hero h1')).toHaveLength(0);
+    expect(doc.querySelector('.hero h6')?.textContent).toContain('internal medicine consults');
   });
 
   it('renders a background video with a poster fallback', () => {
@@ -3001,7 +3006,10 @@ Open `tools/snapshots/home.html` and locate the `.hero` block (search for `class
 - Replace `<img src="https://cdn.prod.website-files.com/...">` with `astro:assets` `<Image>` imports from `~/assets/`, using the mirrored filename.
 - Replace Webflow's `.w-background-video` div with a real `<video autoplay muted loop playsinline poster="...">`.
 - Drop `data-w-id` attributes; where the element had a scroll-reveal interaction, add `class="reveal"`.
-- The hero headline becomes the page's single `<h1>`.
+- **Do not promote the hero heading to `<h1>`.** The live hero uses `<h6 class="heading-41">`
+  with "WELCOME TO" in `.hero-tagline-home` above it. Replicate as published. The page having
+  no `<h1>` is a genuine SEO gap on the live site — record it in the report for the owner, do
+  not silently correct it.
 - Move the extracted CSS rules into `src/styles/components/hero.css` and `collage.css`, converting hardcoded colors to the matching `var(--token)` where the value matches a token exactly.
 
 - [ ] **Step 8: Wire the sections into the homepage**

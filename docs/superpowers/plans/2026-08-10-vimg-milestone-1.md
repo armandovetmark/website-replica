@@ -445,6 +445,9 @@ export type CallbarItem = {
   href?: string;
   icon?: string;
   action?: 'howd-we-do';
+  /** Extra class on the cell's inner box. Declared here rather than inferred
+   *  from href, so changing a link never silently drops its styling. */
+  boxClass?: string;
 };
 
 export const site = {
@@ -496,7 +499,7 @@ export const callbarItems: CallbarItem[] = [
   { kind: 'link', label: 'Pop-up\nClinics', href: '/clinic-schedule-locations', icon: 'calendar2.svg' },
   { kind: 'link', label: 'Our\nTeam', href: '/meet-the-team', icon: 'about.svg' },
   { kind: 'phone', href: site.phoneHref, icon: 'phone.svg' },
-  { kind: 'link', label: 'Contact\nUs', href: '/general-information-request', icon: 'map-pin.svg' },
+  { kind: 'link', label: 'Contact\nUs', href: '/general-information-request', icon: 'map-pin.svg', boxClass: 'open-modal-contact' },
   { kind: 'action', label: "How'd\nWe Do", action: 'howd-we-do', icon: 'positive-review.png' },
 ];
 
@@ -1374,11 +1377,15 @@ import { callbarItems } from '../../config/site';
       );
     }
 
-    const label = item.label!.split('\n');
+    // Split on newlines and join with <br />, so a label with one line (or three)
+    // renders correctly instead of emitting an orphaned <br />.
+    const lines = item.label!.split('\n');
     const box = (
-      <div class={`callbar-link-box${item.href === '/general-information-request' ? ' open-modal-contact' : ''}`}>
+      <div class={['callbar-link-box', item.boxClass].filter(Boolean).join(' ')}>
         <img src={`/icons/${item.icon}`} alt="" class="callbar-icon-image" width="21" height="21" loading="lazy" />
-        <p class="callbar-text">{label[0]}<br />{label[1]}</p>
+        <p class="callbar-text">
+          {lines.map((line, i) => <>{i > 0 && <br />}{line}</>)}
+        </p>
       </div>
     );
 

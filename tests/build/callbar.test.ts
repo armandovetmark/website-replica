@@ -38,4 +38,25 @@ describe('CallBar', () => {
     expect(cells[0].getAttribute('href')).toBe('/clinic-schedule-locations');
     expect(cells[1].getAttribute('href')).toBe('/meet-the-team');
   });
+
+  it('carries the open-modal-contact class on the Contact cell', () => {
+    const cells = doc.querySelector('.callbar')!.children;
+    const contactBox = cells[3].querySelector('.callbar-link-box');
+    expect(contactBox!.className).toContain('open-modal-contact');
+  });
+
+  it('renders the How\'d We Do button with the modal trigger attribute', () => {
+    const cells = doc.querySelector('.callbar')!.children;
+    const button = cells[4] as HTMLButtonElement;
+    expect(button.tagName.toLowerCase()).toBe('button');
+    expect(button.getAttribute('data-modal-open')).toBe('howd-we-do');
+  });
+
+  it('renders label text without orphaned <br> elements', () => {
+    const cells = doc.querySelector('.callbar')!.children;
+    // The Contact cell label is "Contact\nUs" (two lines) - should have one <br>
+    const contactText = cells[3].querySelector('.callbar-text')!;
+    const brCount = contactText.querySelectorAll('br').length;
+    expect(brCount).toBe(1);
+  });
 });

@@ -12,6 +12,9 @@ export type CallbarItem = {
   href?: string;
   icon?: string;
   action?: 'howd-we-do';
+  /** Extra class on the cell's inner box. Declared here rather than inferred
+   *  from href, so changing a link never silently drops its styling. */
+  boxClass?: string;
 };
 
 export const site = {
@@ -63,7 +66,7 @@ export const callbarItems: CallbarItem[] = [
   { kind: 'link', label: 'Pop-up\nClinics', href: '/clinic-schedule-locations', icon: 'calendar2.svg' },
   { kind: 'link', label: 'Our\nTeam', href: '/meet-the-team', icon: 'about.svg' },
   { kind: 'phone', href: site.phoneHref, icon: 'phone.svg' },
-  { kind: 'link', label: 'Contact\nUs', href: '/general-information-request', icon: 'map-pin.svg' },
+  { kind: 'link', label: 'Contact\nUs', href: '/general-information-request', icon: 'map-pin.svg', boxClass: 'open-modal-contact' },
   { kind: 'action', label: "How'd\nWe Do", action: 'howd-we-do', icon: 'positive-review.png' },
 ];
 

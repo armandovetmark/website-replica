@@ -791,13 +791,33 @@ async function listAll(collectionId) {
   return items;
 }
 
+/**
+ * Per-collection item caps. Project owner's policy (2026-08-10): the blog is
+ * capped to keep the repo light. Without this, a re-sync silently restores all
+ * ~28 published posts and quietly discards the policy.
+ */
+const ITEM_CAPS = { blog: 2 };
+
 for (const [name, id] of Object.entries(COLLECTIONS)) {
   const dir = `src/content/${name}`;
   await mkdir(dir, { recursive: true });
-  const items = await listAll(id);
+
+  let items = (await listAll(id)).filter((item) => !item.isArchived && !item.isDraft);
+
+  const cap = ITEM_CAPS[name];
+  if (cap !== undefined && items.length > cap) {
+    items = items
+      .sort((a, b) => String(b.lastPublished ?? '').localeCompare(String(a.lastPublished ?? '')))
+      .slice(0, cap);
+    console.warn(`${name}: capped to ${cap} most recent item(s) per ITEM_CAPS`);
+  }
+
+  const seen = new Set();
   for (const item of items) {
-    if (item.isArchived || item.isDraft) continue;
     const data = { id: item.id, lastPublished: item.lastPublished ?? null, ...item.fieldData };
+    if (!data.slug) throw new Error(`${name}: item ${item.id} has no slug`);
+    if (seen.has(data.slug)) throw new Error(`${name}: duplicate slug "${data.slug}"`);
+    seen.add(data.slug);
     await writeFile(`${dir}/${data.slug}.json`, JSON.stringify(data, null, 2), 'utf8');
   }
   console.log(`${name}: ${items.length} item(s)`);

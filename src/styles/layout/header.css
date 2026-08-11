@@ -232,7 +232,7 @@
   .brand { flex: 0 auto; max-width: 12em; margin-left: 100px; padding-left: 0; }
   .div-block-17 { display: flex; order: -9999; }
   .header-icon { width: 30px; }
-  .header-icon.phone-icon { align-items: center; width: 28px; display: flex; }
+  .header-icon.phone-icon { align-items: center; display: flex; }
   /* Matches the live site: the whole info bar (locations/hours/phone/social
      + desktop CTA buttons) is collapsed below 991px, leaving only the
      hamburger-driven .nav-menu and the mobile CTA row. Must target the
@@ -255,10 +255,14 @@
 @media screen and (max-width: 767px) {
   .nav-wrapper { height: 120px; }
   .brand { max-width: 13em; }
+  .header-icon { width: 28px; }
+  .header-icon.phone-icon { align-items: center; width: 28px; display: flex; }
 }
 
 @media screen and (max-width: 479px) {
   .nav-wrapper { grid-column-gap: 16px; grid-row-gap: 16px; height: 120px; }
   .brand { width: 100px; max-width: 10em; margin-left: 43px; margin-right: .5em; }
   .button.button-inline-block.herader { padding-left: 6px; padding-right: 6px; font-size: .7em; }
+  .social-icon-link { width: 2.5em; height: 2.5em; }
+  .header-icon.phone-icon { margin-top: 2px; display: block; }
 }

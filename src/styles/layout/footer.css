@@ -76,6 +76,22 @@
    ported as-is rather than "fixed" into a different hover color. */
 .footer-link-2:hover { color: #fff; }
 
+/* Owner-reported bug: the "How'd we do?" entry renders as a <button> among
+   <a class="footer-link-2"> siblings (deliberate — see Footer.astro), but a
+   bare button keeps its UA default padding/centred text, so it sat indented
+   out of line with its siblings. Reset it to the same box those anchors get
+   for free, so it lines up exactly. */
+button.footer-link-2 {
+  padding: 0;
+  text-align: left;
+  width: 100%;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  display: block;
+}
+
 .footer_practice {
   flex-direction: row;
   justify-content: center;
@@ -87,6 +103,13 @@
 
 /* No base (unconditioned) rule for .footer-social-wrapper-2 on the live
    site — it's a plain block div until the ≤991px rule below. */
+
+/* Missing base rule (owner-reported bug): the live markup wraps both
+   social rows in `.social-collection-list.social-collection-list-footer`
+   (Webflow's CMS list wrapper) — without its display:flex the icon links
+   stack vertically instead of sitting side by side. */
+.social-collection-list { display: flex; }
+.social-collection-list.social-collection-list-footer { justify-content: center; }
 
 .social-icon-link-3,
 .social-icon-link-4 {

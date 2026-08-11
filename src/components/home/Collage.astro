@@ -11,10 +11,17 @@ import untitled2 from '~/assets/Untitled-2.jpg';
 // as an odd/likely-broken live behavior — but the intent (click a thumbnail,
 // see it enlarged) is unambiguous, so each is wired to a working lightbox
 // pointing at its own full-resolution image.
+// Each anchor's position in the 4-column .gallery-grid comes from a
+// Webflow #w-node-* grid-area rule keyed to that element's unique id (not a
+// reusable class) — tools/snapshots/home.css:
+//   1st: grid-area: span 2 / span 2 / span 2 / span 2 (the large 2x2 image)
+//   2nd/3rd: grid-area: span 1 / span 2 / span 1 / span 2
+//   <=991px: 1st and 2nd (not 3rd) switch to grid-column: span 2 / span 2
+// Reproduced here as three real classes instead of #w-node ids.
 const photos = [
-  { image: fd4a9937, class: 'office-gallery-lightbox' },
-  { image: untitled1, class: 'office-gallery-lightbox side-images' },
-  { image: untitled2, class: 'office-gallery-lightbox side-images' },
+  { image: fd4a9937, class: 'office-gallery-lightbox grid-span-lead' },
+  { image: untitled1, class: 'office-gallery-lightbox side-images grid-span-top' },
+  { image: untitled2, class: 'office-gallery-lightbox side-images grid-span-bottom' },
 ];
 ---
 <div class="general-section no-margin gray-bg">

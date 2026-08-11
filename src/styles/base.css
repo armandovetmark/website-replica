@@ -10,15 +10,38 @@ body {
   background-color: var(--white);
 }
 
+/* Real, previously-missing rule. Confirmed directly against the live site:
+   its own .services-homepage-grid (1fr 1fr 1fr) blows out to 982px-wide
+   tracks at >=1280px too — a real .paragraph{width:930px} rule (see
+   practice-info.css) leaking into the unrelated .paragraph.home-services
+   card text, same as here — but it never shows a horizontal scrollbar
+   because .content clips the overflow. Without this rule that same internal
+   blowout became a visible page-wide scrollbar for us. */
+.content { overflow: hidden; }
+
+/* Owner-reported bug: max-width:940px plus min-width:1280px->1200px and
+   1440px->1300px overrides here were invented — no such values exist on the
+   live site, and they let the header/content grow past the viewport between
+   1280 and 1440px. Real value (tools/snapshots/home.css) is a flat
+   max-width:1228px; only the padding narrows slightly at wider/narrower
+   breakpoints. .container-2 is the same generic Webflow container utility
+   under a second name (both real, unrelated classes on the live site). */
 .container {
   width: 100%;
-  max-width: 940px;
+  max-width: 1228px;
   margin-inline: auto;
-  padding-inline: 1rem;
+  padding-inline: 4em;
 }
 
-@media screen and (min-width: 1280px) { .container { max-width: 1200px; } }
-@media screen and (min-width: 1440px) { .container { max-width: 1300px; } }
+.container-2 {
+  max-width: 1228px;
+  padding-inline: 4em;
+}
+
+@media screen and (min-width: 1280px) { .container { padding-inline: 4em; } }
+@media screen and (min-width: 1440px) { .container { padding-inline: 3em; } }
+@media screen and (max-width: 767px) { .container { padding-inline: 2em; } }
+@media screen and (max-width: 479px) { .container { padding-inline: 1em; } }
 
 .general-section { padding-block: 4rem; }
 .general-section.no-margin { margin: 0; }

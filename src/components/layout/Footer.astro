@@ -75,11 +75,13 @@ const footerSocialLinks = [...socialLinks].reverse();
       <div class="footer-box-2">
         <Image src={footerBadge} alt="" class="image-8" loading="lazy" />
         <div class="footer-social-wrapper-2">
-          {footerSocialLinks.map((s) => (
-            <a href={s.href} target="_blank" rel="me nofollow noopener" class="social-icon-link-3" aria-label={s.label}>
-              <SocialIcon platform={s.icon} class="social-icon footer-social-icon" />
-            </a>
-          ))}
+          <div class="social-collection-list social-collection-list-footer">
+            {footerSocialLinks.map((s) => (
+              <a href={s.href} target="_blank" rel="me nofollow noopener" class="social-icon-link-3" aria-label={s.label}>
+                <SocialIcon platform={s.icon} class="social-icon footer-social-icon" />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -139,11 +141,13 @@ const footerSocialLinks = [...socialLinks].reverse();
               same as the desktop box above — reusing footerSocialLinks rather than
               socialLinks here too. Icons were empty `.ci-font` placeholders here as
               well; same real-SVG fix applied. */}
-          {footerSocialLinks.map((s) => (
-            <a class="social-icon-link-4" href={s.href} target="_blank" rel="me nofollow noopener" aria-label={s.label}>
-              <SocialIcon platform={s.icon} class="social-icon footer-social-icon" />
-            </a>
-          ))}
+          <div class="social-collection-list social-collection-list-footer">
+            {footerSocialLinks.map((s) => (
+              <a class="social-icon-link-4" href={s.href} target="_blank" rel="me nofollow noopener" aria-label={s.label}>
+                <SocialIcon platform={s.icon} class="social-icon footer-social-icon" />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </div>

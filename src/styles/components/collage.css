@@ -28,6 +28,12 @@
 }
 .office-gallery-lightbox.side-images { height: 240px; }
 
+/* Grid placement for the 3 gallery anchors, ported from the live #w-node-*
+   grid-area rules keyed to each element's id (tools/snapshots/home.css). */
+.grid-span-lead { grid-area: span 2 / span 2 / span 2 / span 2; }
+.grid-span-top,
+.grid-span-bottom { grid-area: span 1 / span 2 / span 1 / span 2; }
+
 .office-gallery-thumbnail { width: 100%; height: auto; }
 .office-gallery-thumbnail.gallery {
   object-fit: cover;
@@ -44,6 +50,10 @@
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
   .mt-2 { height: auto; }
+  /* Live: only the 1st and 2nd anchors switch here — the 3rd keeps its
+     base grid-area untouched. */
+  .grid-span-lead,
+  .grid-span-top { grid-column: span 2 / span 2; }
 }
 
 @media screen and (max-width: 479px) {
